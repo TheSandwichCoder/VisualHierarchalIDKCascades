@@ -105,6 +105,61 @@ def get_mobilenet_v3_large(num_classes):
 
     return model.to(device)
 
+
+def _set_mobilenet_mlp_head(
+    model,
+    num_classes,
+    model_type,
+    hidden_size=512,
+    dropout=0.2,
+):
+    in_features = model.classifier[0].in_features
+    model.classifier = nn.Sequential(
+        nn.Linear(in_features, hidden_size),
+        nn.ReLU(),
+        nn.Dropout(dropout),
+        nn.Linear(hidden_size, num_classes),
+    )
+    model.model_type = model_type
+    model.hidden_size = hidden_size
+    model.dropout = dropout
+    return model
+
+
+def get_mobilenet_v3_small_mlp_identifier(
+    num_classes,
+    hidden_size=512,
+    dropout=0.2,
+):
+    weights = torchvision.models.MobileNet_V3_Small_Weights.DEFAULT
+    model = torchvision.models.mobilenet_v3_small(weights=weights)
+    model = _set_mobilenet_mlp_head(
+        model,
+        num_classes,
+        "mobilenet_v3_small_mlp_identifier",
+        hidden_size=hidden_size,
+        dropout=dropout,
+    )
+    return model.to(device)
+
+
+def get_mobilenet_v3_large_mlp_identifier(
+    num_classes,
+    hidden_size=512,
+    dropout=0.2,
+):
+    weights = torchvision.models.MobileNet_V3_Large_Weights.DEFAULT
+    model = torchvision.models.mobilenet_v3_large(weights=weights)
+    model = _set_mobilenet_mlp_head(
+        model,
+        num_classes,
+        "mobilenet_v3_large_mlp_identifier",
+        hidden_size=hidden_size,
+        dropout=dropout,
+    )
+    return model.to(device)
+
+
 def get_frozen_mobilenet_v3_small(num_classes):
     model = get_mobilenet_v3_small(num_classes)
     for parameter in model.features.parameters():
@@ -118,6 +173,39 @@ def get_frozen_mobilenet_v3_large(num_classes):
         parameter.requires_grad = False
     model.frozen_features = True
     return model
+
+
+def get_frozen_mobilenet_v3_small_mlp_identifier(
+    num_classes,
+    hidden_size=512,
+    dropout=0.2,
+):
+    model = get_mobilenet_v3_small_mlp_identifier(
+        num_classes,
+        hidden_size=hidden_size,
+        dropout=dropout,
+    )
+    for parameter in model.features.parameters():
+        parameter.requires_grad = False
+    model.frozen_features = True
+    return model
+
+
+def get_frozen_mobilenet_v3_large_mlp_identifier(
+    num_classes,
+    hidden_size=512,
+    dropout=0.2,
+):
+    model = get_mobilenet_v3_large_mlp_identifier(
+        num_classes,
+        hidden_size=hidden_size,
+        dropout=dropout,
+    )
+    for parameter in model.features.parameters():
+        parameter.requires_grad = False
+    model.frozen_features = True
+    return model
+
 
 
 class ImageNetLogitMLPRouter(nn.Module):
@@ -430,6 +518,9 @@ def save_model(model, cutoff_info, path, class_ids):
     path.parent.mkdir(parents=True, exist_ok=True)
 
     checkpoint = {
+        "model_type": getattr(model, "model_type", None),
+        "hidden_size": getattr(model, "hidden_size", None),
+        "dropout": getattr(model, "dropout", None),
         "num_classes": len(class_ids),
         "class_ids": list(class_ids),
         "class_to_new_id": {
@@ -812,7 +903,7 @@ def train_intermediate_models(get_model=get_partially_frozen_resnet_18, batch_si
     loss_fn = nn.CrossEntropyLoss()
 
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle = True)
-    test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=True)
+    test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False)
     
     for epoch in range(epochs):
         print(f"Epoch {epoch + 1}/{epochs}")
@@ -821,8 +912,8 @@ def train_intermediate_models(get_model=get_partially_frozen_resnet_18, batch_si
         cutoff_info = find_precision_cutoff(test_loader, model)
         print(f"precision: {cutoff_info['precision']} recall: {cutoff_info['recall']}")
 
-        m_name = "intermediate1.pth"
-        fp = f"models/{name}/" + m_name
+        m_name = f"{name}.pth"
+        fp = f"models/intermediate/{m_name}"
 
         save_model(
             model,
@@ -830,6 +921,53 @@ def train_intermediate_models(get_model=get_partially_frozen_resnet_18, batch_si
             fp,
             list(range(num_classes)),
         )
+
+
+def train_mobilenet_identifier_models(batch_size=32, epochs=3):
+    return [
+        train_intermediate_models(
+            get_model=get_frozen_mobilenet_v3_small,
+            batch_size=batch_size,
+            epochs=epochs,
+            name="mobilenet_v3_small_identifier",
+        ),
+        train_intermediate_models(
+            get_model=get_frozen_mobilenet_v3_large,
+            batch_size=batch_size,
+            epochs=epochs,
+            name="mobilenet_v3_large_identifier",
+        ),
+    ]
+
+
+def train_mobilenet_mlp_identifier_models(
+    batch_size=32,
+    epochs=3,
+    hidden_size=512,
+    dropout=0.2,
+):
+    return [
+        train_intermediate_models(
+            get_model=lambda num_classes: get_frozen_mobilenet_v3_small_mlp_identifier(
+                num_classes,
+                hidden_size=hidden_size,
+                dropout=dropout,
+            ),
+            batch_size=batch_size,
+            epochs=epochs,
+            name="mobilenet_v3_small_mlp_identifier",
+        ),
+        train_intermediate_models(
+            get_model=lambda num_classes: get_frozen_mobilenet_v3_large_mlp_identifier(
+                num_classes,
+                hidden_size=hidden_size,
+                dropout=dropout,
+            ),
+            batch_size=batch_size,
+            epochs=epochs,
+            name="mobilenet_v3_large_mlp_identifier",
+        ),
+    ]
 
 def get_global_models():
     m1 = get_resnet_18()
@@ -850,7 +988,8 @@ def get_det_model():
 if __name__ == "__main__":
     # train_specialized_models(get_model=get_frozen_mobilenet_v3_large)
     # get_global_models()
-    get_det_model()
+    train_mobilenet_mlp_identifier_models()
+    # get_det_model()
     # train_logit_mlp_router(batch_size=32, epochs = 3)
     # train_intermediate_models(name = "intermediate1")
     # train_intermediate_models(get_model = get_partially_frozen_resnet_34, name = "intermediate2")

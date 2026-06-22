@@ -15,7 +15,9 @@ from train_models import (
     create_class_subset,
     data,
     get_mobilenet_v3_large,
+    get_mobilenet_v3_large_mlp_identifier,
     get_mobilenet_v3_small,
+    get_mobilenet_v3_small_mlp_identifier,
     get_resnet_18,
     get_resnet_34,
     imagenetv2_dataset,
@@ -126,16 +128,30 @@ def _load_category_state_dict_model(checkpoint):
         if model.fc.out_features != num_classes:
             model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
     elif any(key.startswith("features.") for key in state_dict):
-        classifier_input_features = state_dict["classifier.0.weight"].shape[1]
-        if classifier_input_features == 576:
-            model = get_mobilenet_v3_small(num_classes)
-        elif classifier_input_features == 960:
-            model = get_mobilenet_v3_large(num_classes)
-        else:
-            raise ValueError(
-                "Could not infer MobileNetV3 architecture from "
-                f"classifier.0.weight shape {state_dict['classifier.0.weight'].shape}"
+        model_type = checkpoint.get("model_type")
+        if model_type == "mobilenet_v3_small_mlp_identifier":
+            model = get_mobilenet_v3_small_mlp_identifier(
+                num_classes,
+                hidden_size=checkpoint.get("hidden_size") or 512,
+                dropout=checkpoint.get("dropout") or 0.2,
             )
+        elif model_type == "mobilenet_v3_large_mlp_identifier":
+            model = get_mobilenet_v3_large_mlp_identifier(
+                num_classes,
+                hidden_size=checkpoint.get("hidden_size") or 512,
+                dropout=checkpoint.get("dropout") or 0.2,
+            )
+        else:
+            classifier_input_features = state_dict["classifier.0.weight"].shape[1]
+            if classifier_input_features == 576:
+                model = get_mobilenet_v3_small(num_classes)
+            elif classifier_input_features == 960:
+                model = get_mobilenet_v3_large(num_classes)
+            else:
+                raise ValueError(
+                    "Could not infer MobileNetV3 architecture from "
+                    f"classifier.0.weight shape {state_dict['classifier.0.weight'].shape}"
+                )
     else:
         raise ValueError("Could not infer model architecture from checkpoint state_dict")
 
@@ -610,6 +626,40 @@ def save_model_stats_csvs(df, output_prefix="model_stats"):
 def create_model_stats_dataframe(*args, **kwargs):
     return create_intermediate_model_stats_dataframe(*args, **kwargs)
 
+
+def create_mobilenet_identifier_stats_dataframe(
+    checkpoint_paths=None,
+    target_precisions=(0.75, 0.80, 0.85, 0.90, 0.95),
+    **kwargs,
+):
+    if checkpoint_paths is None:
+        checkpoint_paths = [
+            path
+            for path in sorted(Path("models/intermediate").glob("*.pth"))
+            if "mobilenet" in path.stem.lower()
+        ]
+
+    kwargs.setdefault("confidence_thresholds", [])
+    kwargs.setdefault("target_precisions", list(target_precisions))
+
+    return create_intermediate_model_stats_dataframe(
+        checkpoint_paths=checkpoint_paths,
+        **kwargs,
+    )
+
+
+def save_mobilenet_identifier_stats(
+    output_path="models/stats/mobilenet_identifier_stats.pkl",
+    csv_path="mobilenet_identifier_stats.csv",
+    **kwargs,
+):
+    df = create_mobilenet_identifier_stats_dataframe(**kwargs)
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+    df.to_pickle(output_path)
+    df.drop(columns=["confusion_matrix"], errors="ignore").to_csv(csv_path, index=False)
+    return df
+
+
 def create_global_model_stats_dataframe(
     checkpoint_paths=None,
     model_directory="models/global",
@@ -694,18 +744,18 @@ def save_global_model_stats_csv(df, output_path="global_model_stats.csv"):
     df.drop(columns=["confusion_matrix"], errors="ignore").to_csv(output_path, index=False)
 
 if __name__ == "__main__":
-    # df = create_intermediate_model_stats_dataframe(
-    #     checkpoint_paths=sorted(Path("models/intermediate").glob("*.pth")),
-    #     batch_size=64,
-    #     confidence_thresholds=[],
-    #     target_precisions=[0.75, 0.80, 0.85, 0.90, 0.95],
-    # )
-
-    df = create_global_model_stats_dataframe(
-        checkpoint_paths=sorted(Path("models/det").glob("*.pth")),
+    df = create_intermediate_model_stats_dataframe(
+        checkpoint_paths=sorted(Path("models/intermediate").glob("*.pth")),
         batch_size=64,
+        confidence_thresholds=[],
         target_precisions=[0.75, 0.80, 0.85, 0.90, 0.95],
     )
+
+    # df = create_global_model_stats_dataframe(
+    #     checkpoint_paths=sorted(Path("models/det").glob("*.pth")),
+    #     batch_size=64,
+    #     target_precisions=[0.75, 0.80, 0.85, 0.90, 0.95],
+    # )
 
     print(df.drop(columns=["confusion_matrix"], errors="ignore"))
     df.to_pickle("model_stats.pkl")

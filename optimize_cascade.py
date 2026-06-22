@@ -245,7 +245,7 @@ def get_classifiers(
     specialized_df = _read_stats(specialized_path)
     if not specialized_df.empty:
         specialized_df = specialized_df[specialized_df["precision"] >= min_precision]
-        specialized_df = _drop_dominated_threshold_rows(specialized_df)
+        specialized_df = _drop_dominated_threshold_rows(specialized_df) 
         for _, row in specialized_df.iterrows():
             category_id = _infer_specialized_category_id(row, category_lookup)
             if category_id is None:
@@ -334,7 +334,7 @@ def optimize_cascade(
     identifier_path="models/stats/identifier_stats.pkl",
     globals_path="models/stats/global_stats.pkl",
     det_path="models/stats/det_stats.pkl",
-    min_precision=0.80,
+    min_precision=0.95,
     return_specialized=False,
 ):
     specialized_nodes, identifier_nodes, globals_nodes, det_node = get_classifiers(

@@ -95,9 +95,13 @@ def _link_idk_chain(nodes):
     return nodes[0]
 
 
-def construct_idk_cascade(min_precision=0.75):
+def construct_idk_cascade(
+    min_precision=0.75,
+    identifier_path="models/stats/identifier_stats.pkl",
+):
     _, optimized_seq, optimized_specialized_nodes = optimize_cascade(
         min_precision=min_precision,
+        identifier_path=identifier_path,
         return_specialized=True,
     )
 
@@ -118,11 +122,15 @@ def benchmark(
     precision_thresholds=(0.75, 0.80, 0.85, 0.90, 0.95),
     batch_size=1,
     max_samples=None,
+    identifier_path="models/stats/identifier_stats.pkl",
 ):
     results = []
 
     for precision_threshold in precision_thresholds:
-        cascade = construct_idk_cascade(min_precision=precision_threshold)
+        cascade = construct_idk_cascade(
+            min_precision=precision_threshold,
+            identifier_path=identifier_path,
+        )
         loader = DataLoader(imagenetv2_dataset, batch_size=batch_size, shuffle=False)
 
         total = 0
@@ -217,4 +225,4 @@ def benchmark_resnet152(
 
 
 if __name__ == "__main__":
-    benchmark_resnet152()
+    benchmark()

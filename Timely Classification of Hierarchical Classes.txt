@@ -1,0 +1,908 @@
+                                                                                 eprints@whiterose.ac.uk
+                                                                            https://eprints.whiterose.ac.uk
+                                                      Universities of Leeds, Sheffield and York
+
+
+Deposited via The University of York.
+
+White Rose Research Online URL for this paper:
+https://eprints.whiterose.ac.uk/id/eprint/231704/
+
+Version: Accepted Version
+
+Proceedings Paper:
+Abdelzaher, Tarek, Baruah, Sanjoy, BURNS, ALAN et al. (2025) Timely Classification of
+Hierarchical Classes. In: RTSS 2025: The 46th IEEE Real-Time Systems
+Symposium:Proceedings. Proceedings - Real-Time Systems Symposium. IEEE.
+
+
+
+
+Reuse
+This article is distributed under the terms of the Creative Commons Attribution (CC BY) licence. This licence
+allows you to distribute, remix, tweak, and build upon the work, even commercially, as long as you credit the
+authors for the original work. More information and the full terms of the licence here:
+https://creativecommons.org/licenses/
+
+Takedown
+If you consider content in White Rose Research Online to be in breach of UK law, please notify us by
+emailing eprints@whiterose.ac.uk including the URL of the record and the reason for the withdrawal request.
+            Timely Classification of Hierarchical Classes
+                 Sanjoy Baruah                            Alan Burns                        Tarek Abdelzaher                   Yigong Hu
+
+
+   AbstractÐ An IDK classifier is a learning-enabled software                           case), IDK classifier cascades can also improve reliability and
+component that attempts to categorize each input provided to                            trustworthiness [7], [8] by deferring uncertain or ambiguous
+it into one of a fixed set of base classes, returning IDK (ªI                           examples to a more reliable (albeit slower) fallback system
+Don’t Knowº) if it is unable to do so to a required level of
+confidence. We consider the use of IDK classifiers in applications                      such as a larger model, a human expert, or a downstream
+where it is natural to consider the base classes as comprising                          verifier. Note that, IDK classifier cascades can be regarded as
+the leaves of a class hierarchy. Classification into higher levels                      a special case of the popular mixture of experts models [9],
+of such a hierarchy may be easier than classification into base                         with the additional restriction that the experts are queried
+classes. Given a collection of different IDK classifiers that have                      sequentially (e.g., due to platform resource constraints).
+been trained to classify at different levels of a class hierarchy, we
+derive algorithms for determining the order in which to use these                          Techniques for empirically calibrating arbitrary classifiers
+classifiers so as to minimize the expected duration to successful                       to return confidence values that match their actual probability
+classification (whilst guaranteeing to meet a hard deadline).                           of correctness have been proposed in literature [10] and can
+   Keywords— Classification; Deep Learning; Edge AI; Safe AI                            be leveraged in this work. Note that, in the case of an IDK
+                                                                                        classifier, only the desired confidence threshold needs to be
+                             I. I NTRODUCTION                                           well-calibrated. Given labeled training data and any classifier
+   This paper develops algorithms for real-time classification,                         that returns, for each class, c, an output Oc that monotonically
+subject to latency and confidence constraints, in the important                         increases with confidence in that class, calibration simply
+case where the entities to be classified fall naturally into a                          entails finding the output threshold, Octhresh , such that for
+predefined class hierarchy. The work is timely as modern in-                            instances where Oc ≥ Octhresh , the empirical probability that
+telligent Cyber-Physical Systems (CPS) and Internet of Things                           the input is of class c (according to the labeled data) is equal
+(IoT) applications are increasingly equipped with perception                            to the desired confidence. At run-time, the classifier returns
+modules for understanding their environment, context, or user.                          a non-IDK class, c, only when Oc ≥ Octhresh . The calibration
+Examples range from automatic target recognition [1], [2] to                            ensures that non-IDK answers satisfy the desired confidence
+human activity classification [3]. A recent trend is to perform                         threshold as long as run-time observations are drawn from the
+such processing at the point of need, meaning on an embedded                            same distribution as the training data (i.e., in the absence of
+platform in the field [4], where the sensor data originate,                             domain shift).
+as opposed to a resource-rich server in the cloud. Such in                                 This paper extends prior work on optimizing the order
+situ sensor data processing improves local autonomy and                                 of classifiers in IDK cascades [11]±[15] to the important
+reduces reliance on communication with a remote device, but                             case of class hierarchies. To appreciate the advantages of
+introduces a need for resource economy to reduce latency.                               exploiting class hierarchies, consider a toy example application
+   To reduce the average classification latency (especially on                          that requires us to classify automobiles, each of which is
+low-end embedded platforms), it was suggested to replace                                guaranteed to be of one of four different models. Two of
+large monolithic classifiers with IDK classifier cascades, in-                          the models, the Mazda MX 5 and the Ford MUSTANG, are
+spired by caching systems. An IDK classifier [5], [6] is a                              COUPEs and the other two, the Mazda CX 30 and the Mercedes
+well-calibrated classifier that returns a class if classification                       Benz GLE 350, are Sports Utility Vehicles (SUVs), as shown
+confidence meets or exceeds a predefined threshold, and                                 in Figure 1. Two observations are due:
+returns an ªIDKº (i.e., ªI don’t knowº) otherwise. An IDK                                  • It is often easier to distinguish higher-level classes (e.g.,
+cascade [5] is a sequential arrangement specifying the order                                  an SUV from a COUPE) than it is to directly distinguish all
+in which IDK classifiers are applied to an input until a non-                                 lower-level classes (e.g., a MUSTANG, a MX 5, a CX 30
+IDK classification is obtained.1 In a typical IDK cascade,                                    and a GLE 350). Indeed our experiments, described in
+computationally efficient classifiers with a more limited ac-                                 Section V-A, bear this out. The intuition is that higher-
+curacy or repertoire (optimized for the common case) are                                      level categories are more distinct from one another (and
+generally used first, resorting to more complex and resource-                                 thus easier to distinguish) than lower-level ones.
+intensive classifiers only when upstream classification fails                              • It is also generally the case (again, borne out by our
+(i.e., returns an IDK). Besides reducing the mean latency to a                                experiments) that given an identified higher-level category
+successful classification (by answering quickly in the common                                 (i.e., whether a vehicle is a COUPE or an SUV), one can
+                                                                                              use more accurate specialized classifiers for distinguish-
+   1 In applications where every input must eventually receive a valid
+                                                                                              ing between the different members of that one category
+classification, a deterministic classifier is added as the final stage of the IDK
+cascade. If this deterministic classifier also fails to classify an input, the system         (e.g., different COUPEs or different SUVs). Such special-
+registers a fault, potentially triggering recovery mechanisms.                                ized classifiers are trained exclusively on the specific
+     high-level category. Intuitively, they are generally more
+     accurate because the number of subclasses to distinguish                                 root class    ( ROOT )
+
+
+     among is reduced (e.g., only SUVs or only COUPEs, as
+     opposed to both types), thus simplifying the classification
+     problem.                                                             intermediate
+These observations suggest that a hierarchical classification                   classes      COUPE                             SUV
+
+
+
+approach can break a complex global classification problem
+into a series of simpler ones. In the context of IDK cascades,
+it might therefore appear that one can use prior optimization              base
+results for IDK cascades [11] first to sequence high-level IDK           classes   MUSTANG           MX 5              CX 30         GLE 350
+
+
+classifiers (e.g., those that classify vehicle as being either
+SUV s or COUPEs), then (depending on the identified high-level                               Fig. 1: An example class hierarchy
+class) sequence the corresponding specialized IDK classifiers,
+thereby solving the original global problem.                               classes in the context of classification.
+   Although one can indeed deal with class hierarchies by               2) We develop a generalization of current formal models
+solving a number of individual classification problems, one at             for representing collections of IDK classifiers, to account
+the top level of the hierarchy and another for each intermediate           for class hierarchies and to allow for the more accurate
+class, it turns out that one can do better (in the sense of                modeling of classifier properties upon such hierarchies.
+achieving smaller average duration to successful classification)        3) We obtain algorithms for optimal (in the sense of minimum
+by instead taking a holistic perspective: we show this in                  average duration, whilst subject to a hard deadline) classi-
+Section II via a series of simple examples that also serve                 fication of inputs into classes of such class hierarchies.
+to expose the reasons why this is the case. Intuitively, in             4) We provide an experimental evaluation, including upon
+practice, the used higher-level categories might not always                real-world workloads, demonstrating the efficacy of our
+be very well-separated (or there may be a lot of diversity                 classification algorithms.
+within one of the subcategories), rendering the hierarchical
+                                                                        Organization. The remainder of this manuscript is organized
+decomposition less beneficial. The succession of intermediate
+                                                                        in the following manner. In Section II we use a pair of exam-
+and specialized classifiers might take more time than a larger
+                                                                        ples to illustrate both opportunities that arise in classification
+global classifier. Hence a good cascade optimization algorithm
+                                                                        due to the presence of the class hierarchy, and challenges to
+should have the flexibility to use not only classifiers designed
+                                                                        exploiting these opportunities. In Section III we formalize the
+for individual levels of the class hierarchy, but also those
+                                                                        notion of a class hierarchy, and propose a hierarchy-cognizant
+that flatten it into a single global classification problem.
+                                                                        model for representing IDK classifiers. In Section IV, we
+Moreover, when classifiers at multiple levels of the hierarchy
+                                                                        present pre-processing and runtime algorithms for hierarchical
+are used, the IDK cascade sequencing problems at the different
+                                                                        classification using IDK classifiers. In Section V, we describe
+levels might not be independent. The best order for classifiers
+                                                                        experiments evaluating our algorithms upon real-world case
+considered in a higher-level IDK cascade (to tell the higher-
+                                                                        studies. We conclude in Section VI by summarizing our
+level category) might correlate with the best order of IDK
+                                                                        contributions and suggesting directions for followup research.
+classifiers to consider at the next level (e.g., due to common
+influences such as external weather conditions). And while                            II. S OME I LLUSTRATIVE E XAMPLES
+our examples that illustrate these cases in Section II are
+                                                                           We now step through a pair of simple examples on the auto-
+contrived, we have observed similar phenomena in several
+                                                                        mobile example class hierarchy of Figure 1 that highlight some
+real-life classification use-cases (some of which are discussed
+                                                                        of the challenges that arise in multilevel classification using
+in Section V). In short, the optimization of IDK cascades for
+                                                                        IDK classifiers, beyond those that were identified (and dealt
+solving classification problems involving hierarchical classes
+                                                                        with) in prior work on classification using IDK classifiers.
+needs to be approached holistically, as it is not decomposable
+                                                                           We emphasize that these examples have been explicitly
+into sequences of classification problems at individual levels of
+                                                                        constructed for the purposes of exposing unique aspects of the
+the hierarchy. However, prior work does not allow for holistic
+                                                                        underlying classification problem ± they are not intended to be
+modeling or the exploitation of such naturally-occurring class
+                                                                        realistic. Real-world case studies are discussed in Section V.
+hierarchies. Our evaluation, based on empirical data obtained
+from two different application use-cases shows that non-                A. Example I: Inter-level Dependences
+trivial improvements in latency are attained when holistic IDK
+                                                                           Let us suppose that we have a pair of IDK classifiers K0 and
+cascade optimization is used for hierarchical classes.
+                                                                        K1 that have been trained to distinguish COUPEs from SUVs.
+To summarize, in this work, we seek to better understand                Suppose that K0 and K1 exhibit complementary behaviors
+how to exploit class hierarchies, when they exist, in order to          upon inputs where the ground truth is some COUPE: K0 tends
+achieve faster classification. Our specific contributions are:          to return IDK on all those COUPEs for which K1 returns a base
+1) We propose a formalization of the notion of a hierarchy of           class, and vice versa ± see the first two columns of Table I.
+
+
+
+                                                                    2
+       K0                  K1                  K2                 K3
+      COUPE               IDK             (base class)           IDK
+       IDK                COUPE               IDK            (base class)                      Input                COUPE                    MUSTANG or MX 5
+                                                                                                       Execute K1           Execute KCOUPE
+TABLE I: Example discussed in Section II-A. Classifiers K0 and K1 classify
+inputs as either COUPE or SUV; classifiers K2 and K3 are specialized to only
+classify COUPEs. This table shows the different combinations of outcomes
+that may occur for some application, for inputs for which the ground truth is
+some COUPE (i.e., MUSTANG or MX 5).                                                                          SUV
+
+
+                                                                                                                                             CX 30 or GLE 350
+   Suppose that we also have another pair K2 and K3 of IDK                                                                  Execute   KSUV
+
+classifiers that have been trained only on COUPEs, and hence
+are suitable for use when the intermediate class has already
+been identified as being COUPE. It further so happens that K2                             Fig. 2: A classification strategy for the example of Section II-B
+tends to return some base subclass of COUPE (i.e., MUSTANG
+or MX 5) on those inputs for which K0 returns COUPE and IDK
+on the other COUPE inputs; K3 in contrast, returns MUSTANG                          is drawn uniformly at random from the underlying probability
+or MX 5 on those inputs for which K1 returns COUPE and                              distribution characterizing the intended application, K1 returns
+IDK on the other COUPE inputs ± see the remaining columns                           COUPE with probability (1/3) and SUV with probability (2/3).
+of Table I. This condition may naturally occur, for example, if                     It is evident that with these three classifiers, the optimal
+classifiers use different modalities (e.g., images versus sound).                   classification strategy2 on any input is as shown in Figure 2:
+It could be that, say, K0 and K2 use vision and thus both work                      first use K1 to classify the input as being either a COUPE or an
+better at daytime, whereas K1 and K3 use sound and thus both                        SUV , and then use the appropriate classifier KCOUPE or KSUV
+work better at night.                                                               to obtain a final base classification at an average duration of
+   Assuming that K0 and K1 (K2 and K3 , respectively) have                                                                              
+similar execution durations, it is evident that                                               1            2                  50 2 × 20
+                                                                                        C1 + CCOUPE + CSUV = 10 +                 +          = 40
+                                                                                              3            3                   3        3
+• if K0 is the classifier that determines some input to be a
+                                                                                                                                                 (1)
+   COUPE , then K2 should be used for determining the base
+   class for that input; whereas                                                    A global classifier. Now, suppose we also train another
+• if K1 is the classifier that determines some input to be of
+                                                                                    classifier, K0 , as a ªglobalº classifier Ðone that attempts to
+   a COUPE, then K3 should instead be used for determining                          directly classify its input as belonging to one of the four base
+   the base class for that input.                                                   classes (or return IDK if it is unable to do so to the desired
+This example illustrates that the transition from the higher-                       level of confidence). As we’d stated in Section I, it is more
+level classification problem (COUPE versus SUV) to the lower-                       challenging to achieve accuracy in classifiers of this kind; let
+level one (MUSTANG versus MX 5) is not history-free. Op-                            us therefore suppose that on representative data, K0 returns
+timality is consequently lost if the hierarchical classification                    a base class with probability just 0.5, returning IDK with the
+problem is broken up into multiple non-hierarchical classifica-                     remaining probability (also 0.5). Let C0 denote K0 ’s WCET.
+tion problems (first determining which intermediate class, and                      If we execute K0 prior to executing the classifiers as depicted
+then one classification problem per intermediate class).                            in Figure 2, K0 would return a base class with probability
+                                                                                    0.5 and so the classifiers as depicted in Figure 2 would
+B. Example II: Additional ªGlobalº Classifiers
+                                                                                    only execute with probability 0.5. We’d previously determined
+   Again with our automobile example class hierarchy of                             (Expression (1) above) that the average duration to successful
+Figure 1, let us suppose that: (1) A classifier K1 has been                         classification of the classifiers as depicted in Figure 2 is
+trained to distinguish between SUVs and COUPEs; (2) Another                         40; we may conclude that consequently, the overall average
+classifier, KCOUPE , has only been trained on COUPEs; (3) Anal-                     duration to successful classification is (C0 + 0.5 × 40), which,
+ogously, classifier KSUV has only been trained on SUVs; and                         for values of C0 < 20, is smaller than the average duration to
+(4) A deterministic classifier Kdet has been trained on all four                    successful classification when executing only the classifiers as
+of the base classes and so classifies an input as belonging to                      depicted in Figure 2. This argues in favor of using K0 prior
+one of the four base models. Suppose the execution durations                        to using the classifiers as depicted in Figure 2 if C0 < 20.
+of these classifiers are as follows:                                                   But is this conclusion valid? Let us suppose that closer
+             Classifier     K1     KCOUPE       KSUV      Kdet                      inspection of classifier K0 reveals that it actually performs
+             WCET           10      50           20       100                       abysmally on COUPEs, return IDK with probability 1.0; in
+Let us make the simplifying assumption that the classifiers                         contrast, it is far better at classifying SUVs, for which task
+K1 , KCOUPE , and KSUV are all (almost) perfect at their respec-                    it returns IDK with probability only (1/4). So if we execute
+tive classification tasks, in that they are extremely unlikely to                   K0 prior to executing the classifiers as depicted in Figure 2,
+return IDK on any input. Furthermore, suppose that in our                             2 Indeed, since K
+                                                                                                         COUPE and K SUV are only specialized to classify COUPE s
+intended application one is twice as likely to encounter an                         and SUVs respectively, the only alternative strategy is to directly use the
+SUV as one is to encounter a COUPE ; hence on an input that                         deterministic classifier Kdet (at an expected execution duration of 100).
+
+
+
+
+                                                                                3
+                                                                                           Row#      K2      K1      K0      Probability
+KCOUPE would be called with probability 31 × 1 and KSUV
+                                               
+                                                                                            0         0       0       0          p0
+with probability 23 × 41 and hence the average duration                                     1         0       0       1          p1
+would actually be                                                                           2         0       1       0          p2
+                                                                                            3         0       1       1          p3
+                                                                                        4         1       0       0          p4
+              1        1                  2 1                                               5         1       0       1          p5
+        C0 + C1 +        × 1 CCOUPE +       ×     CSUV
+              2        3                  3 4                                               6         1       1       0          p6
+                                                                                          7         1       1       1          p7
+                      1        1          1
+          =      C0 + × 10 + × 50 + × 20                                  TABLE II: Tabular representation of the 2n disjoint regions in the probability
+                      2        3          6
+                                                                        space for three IDK classifiers (n = 3) and one deterministic classifier. A zero
+                          50 10                                           (one, respectively) in a particular column denotes that the classifier labeling
+          =      C0 + 5 +    +       = C0 + 25                            that column returns IDK (a base class, respectively). p0 ±p7 are non-negative
+                          3     3
+                                                                          real numbers summing to 1.
+which is smaller than the average duration to successful
+classification when executing the classifiers as depicted in
+Figure 2 for C0 < 15 (and not 20, as concluded above). In                 base class, but K1 would return IDK, on some randomly-
+other words, executing classifier K0 prior to the configuration           drawn input. Abdelzaher et al. [11] describe a measurement-
+of Figure 2 increases (rather than decreasing) average duration           based methodology for accurately estimating the pi probability
+for values of C0 satisfying 15 < C0 < 20.                                 values associated with each row of the table, by conducting
+   This example illustrates that while global classifiers Ðthose          profiling experiments using representative training data. This
+that do not exploit the class hierarchy but rather attempt to             methodology characterizes the instance with the 2n probability
+classify an input as belonging to one of the base classesÐ                values and (n + 1) WCET values C0 , C1 , . . . , Cn−1 , Cdet ,
+may be useful despite their far more limited accuracy, their              with Ci denoting the worst-case execution duration3 of IDK
+appropriate use requires careful analysis.                                classifier Ki , 0 ≤ i < n, and Cdet denoting the worst-case
+                                                                          execution duration of the deterministic classifier Kdet .
+            III. A MODEL FOR IDK CLASSIFIERS                              Example 1. To illustrate the interpretation of these parameters,
+                                                                          consider an instance with three IDK classifiers (n = 3) and one
+   We now formalize the notion of class hierarchies                       deterministic classifier ± this is the instance of Table II. One
+(Sec. III-A) and propose extensions (Sec. III-B) to the formal            possible cascade we could synthesize for this example instance
+model for representing collections of IDK classifiers that is             is ⟨K2 , K0 , Kdet ⟩; for this cascade, we can compute its
+commonly used in the real-time literature including [11]±                 average duration to successful classification upon a randomly-
+[15], so as to enable the accurate modeling of additional                 drawn input by the following reasoning.
+aspects of the collections that were revealed, in the examples            • K2 will certainly execute.
+of Section II, to be salient in the context of hierarchical               • Rows 0±3 of Table II correspond to the outcome that K2
+classification problems.                                                    returns IDK; hence there is a probability (p0 + p1 + p2 + p3 )
+   We start out with a brief description of the currently-used              that K0 will need to execute.
+model. In the standard model for IDK classifiers [11]±[15],               • Of these four rows 0±3, Row 0 and Row 2 correspond to the
+an instance comprises n distinct IDK classifiers denoted by                 outcome that K0 returns IDK; hence there is a probability
+K0 , K1 , K2 , . . . , Kn−1 , as well as a deterministic classifier         (p0 + p2 ) that both K2 and K0 will return IDK and hence
+(see footnote 1) Kdet , all for the same classification problem.            Kdet will need to execute
+The probabilistic behaviors of the different classifiers are              Therefore the expected duration to successful classification of
+not assumed to be independent; rather, they are collectively              the cascade ⟨K2 , K0 , Kdet ⟩ upon a randomly-drawn input is
+specified in tabular form in a table with 2n rows, with each row          equal to C2 + (p0 + p1 + p2 + p3 ) × C0 + (p0 + p2 ) × Cdet .
+corresponding to one of the 2n potential combinations of the n
+IDK classifiers returning either a real class or IDK for an input.        Obtaining optimal cascades. Given the specifications of an
+While the exponential number of combinations may seem like                instance as 2n probability values and (n + 1) WCET values,
+a limitation, the total number of used classifiers in practice            Abdelzaher et al. [11] have derived an algorithm that synthe-
+is small (not unlike the case with the number of levels used              sizes a cascade that is optimal in the sense that this cascade
+in a cache hierarchy). After all, the goal is to save resources.          has the minimal average duration to successful classification
+Table II depicts the table for the case n = 3. In this table,             (subject to guaranteeing to always meet a hard deadline if one
+p0 denotes the probability that on some input that is drawn               is specified).
+randomly from the underlying distribution characterizing the              A. Class Hierarchies
+application for which these classifiers have been trained, all
+three IDK classifiers K0 , K1 , and K2 will return IDK (and                 The goal in classification is to categorize each input as
+hence only Kdet is able to classify this input), while p7 denotes         belonging to one of a specified set of base classes. In this
+the probability that all three classifiers would return a base               3 This is a simplifying assumption; all our results readily extend to the more
+class on such a randomly-drawn input. Similarly, p5 denotes               general model [11, Sec. 3] that uses a pair of parameters, C̃i and Ci , with
+the probability that classifiers K2 and K0 would return a                 C̃i denoting the average execution duration and Ci the worst-case duration.
+
+
+
+
+                                                                      4
+                                                                                                              
+paper, we extend prior work by assuming that these base                     and 2(|Kϕ |+|Kℓ |) × (k + 1)|KI | rows for specifying the
+classes comprise a 2-level class hierarchy in the sense that                probability space when involving the intermediate class Iℓ .
+they can be partitioned into a set of k intermediate classes                Each column corresponds to one of the global classifiers,
+denoted I0 , I1 , . . . , Ik−1 , such that all the base classes in          one of the intermediate classifiers, or one of the specialized
+each intermediate class possess a variety of common features.               classifiers in Kℓ . (Recall, from the illustrative example of
+Figure 1 (already introduced in Section I) provides a visual                Section II-A, that the optimal choice of classifiers once the
+representation of the class hierarchy for the example we have               intermediate class is known may depend upon the outcomes
+considered in Sections I and II Ð here the two intermediate                 of classifiers that were executed before the intermediate class
+classes (and hence, k = 2) are                                              became known ± hence information about the classifiers in
+                  def                                                       Kϕ and KI needs to be maintained in this probability table.)
+             I0   =     COUPE = { MUSTANG , MX 5}
+                  def
+                                                                            The intermediate classifier either returns IDK or one of the
+             I1   =     SUV     = {CX 30, GLE 350}                          k intermediate classes; the base and the specialized classifiers
+                                                                            may return some base class or IDK, resulting in the number
+It is often meaningful to define hierarchies that are deeper than
+                                                                            of rows in the table stated above.
+two levels. For ease of presentation we restrict our attention to
+two-level hierarchies for now; extension to deeper hierarchies              Example 2. Table III lists the probability tables for our
+is discussed in Section IV-E.                                               example of Section II-B. For this example |Kϕ | = 1, |K0 | =
+                                                                            |K1 | = 1, and |KI | = 1, and so the first table has 2 columns
+B. Class Hierarchies: Modelling IDK Classificaton                           and 21 × (2 + 1)1 = (2 × 3) = 6 rows, while each of the
+   We now extend the formal model of [11]±[15] to incorporate               two specialized tables has 3 columns and 22 × 41 = 16 rows.
+class hierarchies. Let k denote the number of intermediate                     To see that these probability tables do indeed represent the
+classes in the sole intermediate level (i.e., intermdiate classes           instance described in Section II-B, observe that
+I0 , I1 , . . . , Ik−1 partition the base classes). The collection of       • K1 is assumed to never return IDK; hence, Rows 1±2 of
+IDK classifiers is partitioned into (k + 2) distinct sets:                    the leftmost table have zero probability.
+1) A set KI of intermediate classifiers, each of which has been             • SUV s are twice as likely as COUPE s, and hence in the
+
+     trained to return some intermediate class Iℓ , 0 ≤ ℓ < k, or             leftmost table Rows 2±3 sum to 1/3, and Rows 4±5 to 2/3.
+     IDK on any input;                                                      • K0 is bad at COUPE s: Row 3 of the first table has probability
+2) A set Kϕ of global classifiers, each of which has been                     zero; Row 9 of the second has probability 1.0
+     trained to return either a base class or IDK upon any input.           • K0 returns IDK with probability (1/4) on SUV s: Row 10
+3) For each ℓ, 0 ≤ ℓ < k, a set Kℓ of specialized classifiers,                of the third table has probability 1/4 (and Row 14 as the
+     each of which has been trained to return either a base                   remaining probability of 3/4)
+     class that is ∈ Iℓ , or IDK, on any input that has a priori            Generating these tables. These probability tables are obtained
+     been determined to belong to the intermediate class Iℓ                 using a measurement-based methodology that is a generaliza-
+     (presumably by some classifier in KI ).                                tion of the one developed by Abdelzaher et al. [11]. We record
+For the example discussed in Section II-B (and, as stated                   the classification decisions made by each of the IDK classifiers
+                        def               def
+above, letting I0 = COUPE and I1 = SUV), we would have                      upon a large number of representative inputs.4 We associate
+                                                                            a count, instantiated to zero, with each row of the tables,
+KI = {K1 }, Kϕ = {K0 }, K0 = {KCOUPE }, and K1 = {KSUV }
+                                                                            and for each input increment the appropriate counts. Since
+In addition, there is a deterministic classifier Kdet that never            each specialized classifier Ki ∈ Kℓ is only trained to classify
+returns IDK ± it classifies each input to some base class. Each             inputs in Iℓ , we derive its confidence threshold using only such
+classifier Ki is characterized by a WCET Ci . As in prior                   inputs. However, when generating the probability tables, we
+work [11], the probabilistic behaviors of the classifiers are               include all inputs and record the true outputs, including those
+specified in tabular form; we discuss                                       outside Iℓ , to accurately capture the classifier’s behavior in
+                                    the details  below.
+Initial table. This is a table with |Kϕ | + |KI | columns and               deployment. Once all the inputs have been processed in this
+                                                                            manner, the probability value associated with each row of the
+ 2|Kϕ | × (k + 1)|KI | rows specifying the probability space
+                       
+                                                                            probability table is set equal to its count divided by the total
+for when one begins classifying an input and before the inter-              number of relevant inputs. (Section V-A details the application
+mediate class to which it belongs becomes known. One column                 of this method upon one of our real-world use cases.)
+corresponds to each global classifier and each intermediate                 A minor generalization. The model above is easily gener-
+classifier. Each global classifier may return some base class               alized to use-cases where some intermediate classifiers may
+or IDK, while each intermediate classifier may return one of                additionally return some base classes. An example use-case of
+the k intermediate classes or IDK (for a total of (k + 1)
+possibilities); hence the number of rows in the table is as stated            4 Each of the classifiers will have undergone training and validation upon
+
+above.                                                                      representative inputs prior to this profiling phase; in many cases, this training
+Specialized tables. For each ℓ, 0 ≤ ℓ < k,          there is a            data can be reused here, thereby eliminating the need for additional data. If
+                                                                            new data is necessary it must also be representative of the expected inputs
+separate specialized table with |KI | + |Kϕ | + |Kℓ | columns               during deployment.
+
+
+
+
+                                                                        5
+                                                       Row#     KCOUPE     K1      K0      Prob          Row#       KSUV      K1     K0     Prob
+                                                         0         0        0       0                       0         0        0      0
+                                                         1         0        1       0                       1         0        1      0
+                                                         2         0        2       0                       2         0        2      0
+            Row#      K1     K0     Prob                 3         0        3       0                       3         0        3      0
+              0         0     0                          4         0        0       1                       4         0        0      1
+              1         0     1                          5         0        1       1                       5         0        1      1
+              2         1     0      1/3                 6         0        2       1                       6         0        2      1
+              3         1     1                          7         0        3       1                       7         0        3      1
+              4         2     0      1/6                 8         1        0       0                       8         1        0      0
+              5         2     1      1/2                 9         1        1       0       1.0             9         1        1      0
+                                                        10         1        2       0                      10         1        2      0      1/4
+                                                        11         1        3       0                      11         1        3      0
+                                                        12         1        0       1                      12         1        0      1
+                                                        13         1        1       1                      13         1        1      1
+                                                        14         1        2       1                      14         1        2      1      3/4
+                                                        15         1        3       1                      15         1        3      1
+TABLE III: Probability tables for the example of Section II-B. (Only non-zero probabilities shown ± all other entries in the ªProb.º columns are zeros.) A ª0º
+in K1 ’s column denotes that it returns IDK, a ª1º that it returns COUPE, and a ª2º that it returns SUV. For any other classifier, a ª1º in its column denotes
+that it returns the intermediate class labeling the column, a ª0º denotes that it returns IDK.
+
+
+
+this kind is discussed in Section V-A, where some intermediate                        that is an ordered list comprising a subset of (Kϕ ∪ Kℓ )
+classifiers return either COUPE or SUV, denoting a vehicle of                         and terminated by Kdet .
+the corresponding subclass, or ªBACKGROUNDº, denoting the                         Section IV-B explains how these cascades are synthesized.
+absence of a vehicle. In this case, ªBACKGROUNDº can be                           Classification. Upon construction, these cascades are stored
+thought of as a base class: a ªBACKGROUNDº object needs no                        and used for classification during runtime in the following
+further classification.                                                           manner. Given an input that is to be classified,
+                       IV. ALGORITHMS                                             • We start out attempting to classify this input via the classi-
+   In this section, we will develop a recursive formulation to                      fiers in the initial cascade (in the order in which they appear
+the problem of determining an optimal strategy for choosing                         in the cascade), until a non-IDK classification is obtained.
+the order in which to execute IDK classifiers so as to minimize                   • If this non-IDK classification is to a base class, then we
+the average duration to successful classification whilst guar-                      return this base class and are done. Else, some intermediate
+anteeing to always complete classification within a specified                       classifier Ki in the initial cascade must have returned some
+hard deadline D. (For ease of presentation we first focus on                        intermediate class Iℓ .
+minimizing the average classification duration; in Section IV-C                   • Henceforth we attempt to classify the input by using the
+we explain how to incorporate consideration of the deadline                         classifiers in the specialized cascade(Ki , Iℓ ) in order, until
+D.) Algorithm 1 applies Dynamic Programming to speed up                             a non-IDK classification is obtained. This non-IDK classifi-
+the recursion by avoiding unnecessary re-computations and                           cation is guaranteed to be some base class ± this is returned,
+thereby obtain a reasonably efficient implementation.                               and we are done.
+A. An Overview                                                                    In Example 3 below, we discuss the example instances of
+                                                                                  Section II in terms of initial and specialized cascades.
+   We start out with a high-level overview of our approach.
+We assume a 2-level class hierarchy (as in Figure 1) with k                       Example 3. Recall that the instance of Section II-A assumes
+intermediate classes I0 , I1 , . . . , , Ik−1 . As described in Sec-              that intermediate classifiers K0 and K1 both have about the
+tion III-B, there are (k + 2) disjoint sets of IDK classifiers:                   same execution duration, while classifiers K2 and K3 , both
+the global classifiers Kϕ , the intermediate classifiers KI , and                 specialized for COUPEs, offer complementary coverage (see
+the specialized classifiers K0 , K1 , . . . , Kk−1 . In addition, there           Table I); hence the initial cascade may be ⟨K0 , K1 , Kdet ⟩,
+is a single deterministic classifier Kdet . Each classifier is                    and
+characterized by its worst-case execution time (WCET), with                           •   specialized cascade(K0 , COUPE) = ⟨K2 , Kdet ⟩
+classifier Ki ’s WCET denoted Ci . The probabilistic behaviors                        •   specialized cascade(K1 , COUPE) = ⟨K3 , Kdet ⟩
+of the IDK classifiers are characterized by (k + 1) probability
+                                                                                  For the instance of Section II-B, recall that we use the global
+tables: an initial table, and one specialized table for each of
+                                                                                  classifier K0 if its WCET C0 < 15, and then the classification
+the k intermediate classes Ð see Section III-B.
+                                                                                  strategy of Figure 2. This translates to an initial cascade of
+Preprocessing. Prior to classification time we will construct,
+                                                                                  ⟨K0 , K1 , Kdet ⟩, and
+by a pre-processing algorithm that implements recursive search
+via dynamic programming                                                               •   specialized cascade(K1 , COUPE) = ⟨KCOUPE , Kdet ⟩
+• An initial cascade that is an ordered list comprising a subset                      •   specialized cascade(K1 , SUV) = ⟨KSUV , Kdet ⟩
+   of (Kϕ ∪ KI ), terminated by Kdet ; and                                        whereas if C0 ≥ 15, the initial cascade does not include K0
+• For each intermediate classifier Ki in this initial cascade and                 (it’s simply ⟨K1 , Kdet ⟩) while the specialized cascades remain
+   each intermediate class Iℓ , a specialized cascade(Ki , Iℓ )                   the same.
+
+
+
+                                                                              6
+B. The Cascade-synthesis Algorithms                                            Algorithm 1: EXPAND( ) and EXPAND′ ( )
+   We now describe our dynamic-programming algorithms for                  1  EXPAND (S)
+constructing the initial cascade and the specialized cascades.             2  if S.cost has already been computed then
+                                                                            3     return S.cost
+We focus here primarily on explaining the intuition behind our
+algorithms; the algorithms themselves are provided in pseudo-              4  if (S = = (Kϕ ∪ KI )) then
+                                                                            5      S.cost = Cdet ; S.next = Kdet
+code form as Algorithms 1 and 2 (and as Python code in the                  6      return S.cost
+separately-uploaded supplementary material).
+                                                                           7  S.cost = ∞; S.next = K∞ // K∞ : a placeholder
+   When starting out classifying some input we will not                    8  for each Kj ∈ (KI \ S) do
+generally know beforehand the intermediate class to which it                9     Pr = COND P R(S, Kj )
+belongs, and so may only attempt to classify it by using clas-             10     tmpCost = Cj + Pr[0] × EXPAND(S ∪ {Kj }) +
+sifiers in (KI ∪ Kϕ ∪ {Kdet }). Hence, these are the classifiers                    k−1
+                                                                                    X
+                                                                                        Pr[ℓ + 1] × EXPAND′ (S, Iℓ , ∅, Kj
+                                                                                                                           
+considered in synthesizing the initial cascade.
+                                                                                      ℓ=0
+   Let S denote the classifiers in the prefix of the initial cascade       11       if (tmpCost < S.cost) then
+that we have constructed so far (initially, S = ∅). Suppose they           12            S.cost = tmpCost; S.next = Kj
+all returned IDK on some input. Below we will define a func-
+                                                                           13 for each Kj ∈ (Kϕ \ S) do
+tion EXPAND(S) (in Algorithm 1) for determining the classifier             14     Pr = COND P R(S, Kj )
+Kh ∈ ((KI ∪ Kϕ ) \ S) to execute next, so as to minimize the               15     tmpCost = Cj + Pr[0] × EXPAND(S ∪ {Kj })
+average remaining duration to successful classification; a call            16     if (tmpCost < S.cost) then
+to EXPAND(S) will additionally return this minimum average                 17          S.cost = tmpCost; S.next = Kj
+remaining duration to successful classification.                           18   if (Cdet < S.cost) then
+   If this classifier Kh returns IDK, then we add Kh to S                  19        S.cost = Cdet ; S.next = Kdet
+and repeat the call to EXPAND(S). If Kh determines that the                20   return S.cost
+input belongs to some base class, then we are done. Else, it
+must be the case that Kh is an intermediate classifier (i.e.,                            ′
+                                                                                EXPAND (S, Iℓ , T, Kh )
+Kh ∈ KI ), and it has declared that the input belongs to some              21
+
+                                                                           22   if (S, Iℓ , T, Kh ).cost has already been computed then
+intermediate class Iℓ . Below we will define another function,             23        return (S, Iℓ , T, Kh ).cost
+EXPAND ′ (S, Iℓ , T, Kh ) (Algorithm 1, line 21), for determining
+                                                                           24 if ((S ∪ T ) = = (Kℓ ∪ Kϕ )) then
+the classifier to execute in this case in order to minimize the            25      (S, Iℓ , T, Kh ).cost = Cdet ; (S, Iℓ , T, Kh ).next = Kdet
+average remaining duration to successful classification, where             26      return cost
+• S has the same interpretation as above: it is the set of                 27 (S, Iℓ , T, Kh ).cost = ∞; (S, Iℓ , T, Kh ).next = K∞
+   classifiers, S ⊂ (KI ∪ Kϕ ), that we have used thus far but             28 for each Kj ∈ ((Kℓ ∪ Kϕ ) \ (S ∪ T ) do
+   they have all returned IDK;                                             29      Pr = COND P R′ (S, Iℓ , T, h, Kj )
+• Kh is the intermediate classifier that has returned Iℓ on the
+                                                                           30      if (Kj ∈ Kϕ ) then
+                                                                           31           tmpCost=
+   input; and                                                                                                                        
+                                                                                          Cj + Pr × EXPAND′ (S ∪ {Kj }, Iℓ , T, Kh )
+• T is the set of specialized classifiers for intermediate class
+   Iℓ (i.e., T ⊂ Kℓ ) that we have used in an attempt to classify          32       else //Must be Kj ∈ Kℓ
+   the input (after Kh had identified it as belong to class Iℓ ),          33           tmpCost=                                    
+   but they have all returned IDK (initially, T = ∅).                                     Cj + Pr × EXPAND′ (S, Iℓ , T ∪ {Kj }, Kh )
+As was the case with EXPAND(S), a call to                                  34       if ((S, ℓ, T, h).cost > tmpCost) then
+EXPAND ′ (S, Iℓ , T, Kh ) will additionally return the minimum             35            (S, Iℓ , T, Kh ).cost = tmpCost;
+average remaining duration to successful classification.                                  (S, Iℓ , T, Kh ).next = Kj
+The function EXPAND(S). Recall that S denotes the set of                   36   if ((S, Iℓ , T, Kh ).cost > Cdet ) then
+classifiers, S ⊂ (KI ∪ Kϕ ), that we have used in an attempt               37        (S, Iℓ , T, Kh ).cost = Cdet ; (S, Iℓ , T, Kh ).next = Kdet
+to classify the input but they have all returned IDK.                      38   return (S, Iℓ , T, Kh ).cost
+   The first if-condition of EXPAND(S) (Line 2) checks
+whether we have already considered this case; if so, we would
+have stored the minimum average remaining time to successful
+classification in the variable S.cost. (Thus, this if-condition            line 13) classifiers one at a time, seeking to identify the one
+is essentially implementing a top-down ± memoized ± dynamic                to execute next in order to minimize the remaining average
+program.)                                                                  duration to successful classification.
+   The next if-condition (Line 4) checks whether we have                      If we execute classifier Kj ∈ ((KI ∪ Kϕ ) \ S), the proba-
+exhausted the available supply of global and intermediate                  bility of Kj returning a particular output (IDK or some inter-
+classifiers; if so, we must use the deterministic classifier Kdet .        mediate class for Kj ∈ KI ; IDK or some base class for Kj ∈
+   The remainder of the pseudo-code considers the remaining                Kϕ ) can be computed as the ratio (Numerator/Denominator),
+intermediate (the for-loop at line 8) and global (the for-loop at          where
+
+
+
+                                                                       7
+• Denominator is the sum of the probabilities of all those                                     Algorithm 2: Synthesizing the cascades
+  rows of the initial probability table in which all the columns                           1Call EXPAND(∅)
+  corresponding to classifiers in S are labeled IDK; and                                   2// Synthesizing the initial cascade
+• Numerator is the sum of the probabilities of all those rows                             3 Initialize the cascade to be empty
+                                                                                          4 S = ∅
+  of the initial probability table in which all the columns
+                                                                                          5 repeat
+  corresponding to classifiers in S are labeled IDK, and the                              6      Ktmp = S.next
+  column corresponding to Kj is labeled with that particular                              7      Append Ktmp to the end of the cascade
+  output.5                                                                                8      S = S ∪ {Ktmp } // Assume Ktmp returns IDK
+                                                                                          9 until (Ktmp = = Kdet );
+This    computation is implemented by a function
+COND P R (S, Kj )   (pseudo-code omitted, since it does
+exactly what is described above) that is called at Lines 9                                10 // Synthesizing specialized_cascade(Ki , Iℓ )
+and 14. Let Pr{IDK} denote the probability that this outcome                              11 Initialize the cascade to be empty
+                                                                                          12 S = the classifiers preceding Ki in the initial cascade
+is IDK, and Pr{Iℓ } that this outcome is intermediate class                               13 T = ∅
+Iℓ (andh hence the probability              i being returned
+                            P of a base class                                            14 repeat
+                                k−1
+equals 1.0 − Pr{IDK} −          ℓ=0 Pr{Iℓ }    ).                                         15      Ktmp = (S, Iℓ , T, Kℓ ).next
+                                                                                          16      Append Ktmp to the end of the cascade
+   Lines 10 and 15 compute the average remaining duration to                              17      if Ktmp ∈ Kϕ then
+successful classification of the input as follows:                                        18           S = S ∪ {Ktmp }
+                                                                                        19        else
+       Cj + Pr{IDK} × EXPAND(S ∪ {Kj })                                                   20               T = T ∪ {Ktmp }
+               k−1
+               X
+                                                        !                                 21    until (Ktmp = = Kdet );
+                                        ′
+           +        (Pr{Iℓ } × EXPAND (S, Iℓ , ∅, Kj ))
+                    ℓ=0
+
+Here, the first term represents the execution duration of clas-                           As before, let Pr{IDK} denote the probability that the out-
+sifier Kj , the second, the remaining expected duration if Kj                             come is IDK (and so the probability of a base class being
+returns IDK, and each individual term within the summation                                returned is (1 − Pr{IDK})).
+in the third, the remaining expected duration if Kj returns a                                We can compute the average remaining duration to success-
+particular intermediate class Iℓ .                                                        ful classification of the input as
+   Finally, the if-condition at Line 18 checks whether it would
+                                                                                                                                               
+                                                                                               Cj + Pr{IDK} × EXPAND′ (S ∪ {Kj }, Iℓ , T, Kh )
+be faster to simply directly execute the deterministic classifier.
+The function EXPAND′ (S, Iℓ , T, Kh ) is essentially understood                           if Kj ∈ Kϕ , and
+in much the same manner as EXPAND(S) above. Let S, Iℓ , T                                                                                    
+and Kh have the interpretations discussed earlier: S denotes                                  Cj + Pr{IDK} × EXPAND′ (S, Iℓ , T ∪ {Kj }, Kh )
+the set of classifiers in (S ⊂ (KI ∪ Kϕ )) that have returned
+IDK while Kh ∈ KI has returned the intermediate class Iℓ ; T                              if Kj ∈ Kℓ .
+(initially ∅ when EXPAND′ ( ) is first called ± see Line 10) de-                          Synthesizing the cascades. A call to EXPAND(∅) will make
+notes the set of classifiers in Kℓ that have returned IDK. If we                          the needed recursive calls to EXPAND( ) and EXPAND′ ( ) with
+were to now execute classifier Kj ∈ ((Kℓ \ T ) ∪ (Kϕ \ S)),                               the appropriate parameter settings, which in turn will result
+two outcomes are possible: IDK or some base class. The                                    in the cost and next variables being assigned appropriate
+probability of Kj returning IDK can be computed as the ratio                              values. The manner in which the cascades are then synthesized
+(Numerator/Denominator), where                                                            is straightforward, and is presented in pseudo-code form in
+                                                                                          Algorithm 2.
+• Denominator is the sum of the probabilities of all those rows
+  of the probability table for intermediate class Iℓ in which                             C. Incorporating Hard Deadlines
+  all the columns corresponding to classifiers in (S ∪ T ) are
+  labeled IDK while the column corresponding to the classifier                               If a hard deadline D is additionally specified with the
+  Kh is labeled with a designation indicating that it returns                             interpretation that classification must always complete within
+  the correct intermediate class (which is, of course, Iℓ ); and                          D time units, the procedures EXPAND( ) and EXPAND′ ( )
+• Numerator is the sum of the probabilities of all those rows                             of Algorithm 1 are modified to each accept an additional
+  of the probability table for intermediate class Iℓ that satisfy                         parameter D, denoting the remaining duration to deadline.
+  all the conditions above (for Denominator), and the column                              When EXPAND( ) is called for the first time (Line 1 of Algo-
+  corresponding to Kj is labeled with IDK.                                                rithm 2), this parameter is set equal to D (i.e., Line 1 of Algo-
+                                                                                          rithm 2 is modified to ªEXPAND(∅, D)º). Within EXPAND( )
+  5 Equivalently, it is the sum of the probabilities of all those rows that satisfy
+                                                                                          and EXPAND′ ( ), IDK classifier Ki is only considered for
+the conditions for Denominator above, that additionally have the column                   possible execution if its execution duration Ci ≥ D + Cdet ;
+corresponding to Kj labeled with that particular output.                                  if it is considered, then the corresponding recursive call (in
+
+
+
+                                                                                      8
+Lines 10, 15, 31, or 33) is made with the deadline parameter              that node.6 Probability tables are associated with each non-
+set to (D − Ci ).                                                         leaf node, specifying the probability space of classification
+   A note: Recall (footnote 3) that we’ve been using a sim-               outcomes for the classifiers that are specialized to that class,
+plified model for IDK classifiers thus far: the model given               conditioned on the outcomes of classifiers associated with each
+in [11, Sec. 3] actually characterizes each classifier’s execution        intermediate class associated with nodes between the node and
+duration via a pair of parameters, C̃i and Ci , with C̃i denoting         the root of the classification tree.
+the average execution duration and Ci the worst-case duration.
+                                                                                                     V. E VALUATION
+Thus it is the C̃i values (rather than the Ci ’s) that are used
+in Algorithms 1 and 2 for minimizing average classification                 We evaluate our algorithm on two real-world applications:
+duration; however, the Ci values ±WCET characterizations±                 vehicle detection using multi-modal sensory inputs, and hu-
+are used in the tests (ªif Ci ≥ D + Cdet º) that check whether            man activity recognition (HAR) using wearable sensors. This
+it is safe to execute a classifier Ki .                                   section presents our experience and findings; the data and code
+                                                                          used have been uploaded as Supplementary Material (and will
+D. Run-time Complexity                                                    be offered for Artifact Evaluation if this paper is accepted).
+
+   There are two aspects to the computational complexity of               A. Vehicle Detection Case Study
+our approach. Pre-runtime complexity accounts for the time                Data collection and pre-processing. We use the M3N-VC
+required to (i) train the classifiers; (ii) populate the initial          dataset [16], a large-scale vehicle monitoring dataset with
+and the specialized probability tables; and (iii) synthesize the          acoustic and seismic signals recorded from multiple moving
+cascades. Classification complexity concerns the time taken to            vehicles. As described in [16], sensor nodes equipped with a
+classify a single input during runtime.                                   microphone (acoustic, 1.6 kHz), geophone (seismic, 200 Hz),
+   The pre-runtime complexity of our approach is high, as                 and GPS (1 Hz) were deployed in six distinct environments,
+is the norm in most deep-learning based computational ap-                 with 6±8 nodes per scene. Vehicles were driven around the
+proaches. Effective training of the IDK classifiers requires              area while the sensor nodes recorded signals and synchronized
+the collection of large amounts of representative training                their clocks via GPS. Only the acoustic and seismic signals
+data, upon which each classifier must be trained. Populating              are used in this study.
+the probability tables also requires that large amounts of                   For this study, we considered four base vehicle types:
+representative data be classified by the different classifiers. The       MUSTANG , MX 5, CX 30, and GLE 350, organized into the
+cascade-synthesis algorithm has running time exponential in               hierarchy of Figure 1. We use a 3.43-hour subset of data
+the number of classifiers ± Section V-C provides some example             from six nodes and segment it into 2-second windows, while
+measurements. This is not surprising: earlier cascade synthesis           segments with missing sensor readings are discarded. The
+algorithms [11]±[15] that did not exploit hierarchical structure          segmented data is transformed into spectrograms using Short-
+already had exponential running time.                                     Time Fourier Transform (STFT). By combining three com-
+   When it comes to classification complexity, however, our               plexity levels of DeepSense [4] classifiers (varying convo-
+approach is very efficient : assuming that all the classifiers            lutional/recurrent layer width and depth) with two sensor
+are pre-loaded and indexed in some manner that allows for                 modalities, we generate 12 model variants. Using these model
+constant-time retrieval, the time to classify any input is linear         variants, we train three types of classifiers: (i) global classifiers
+in the number of classifiers needed to classify it optimally (i.e.,       that predict one of the four base vehicle classes or BACK -
+with minimum average execution time). Thus our complexity                 GROUND , (ii) intermediate classifiers that classify samples as
+tradeoff is entirely consistent with the paradigm in DL-based             either SUV, COUPE, or BACKGROUND, and (iii) specialized
+edge AI: trade off considerable pre-runtime complexity for                classifiers that classify samples into base classes within the
+very efficient (in fact, optimal) runtime use.                            SUV or the COUPE group. Each classifier outputs a predicted
+                                                                          label and confidence score. We set a required confidence
+                                                                          threshold of 0.90 for global classifiers, and 0.95 for both
+E. Generalizing to Deeper Hierarchies
+                                                                          intermediate and specialized classifiers (so that the cumulative
+   Both the IDK model of Section III and the algorithms                   error at the end of both stages is at most 10%, similar to
+discussed earlier in this section readily generalize to deeper            global). If the confidence of a classifier exceeds the threshold,
+hierarchies ± generalizations of Figure 1 with the hierarchy              a label is returned; otherwise, the classifier outputs IDK.
+represented as a tree with more levels, with each leaf de-                Profiling. By examining the Pareto front of classifiers consid-
+noting a base class and each non-leaf node representing an                ering both the success rate and execution time, we select two
+intermediate class. Different IDK classifiers are trained for             intermediate classifiers (K0 and K1 ), two global classifiers
+different purposes: top-level classifiers classify any input into         (K2 , K3 ), one specialized classifier for the SUV class (K4 ),
+one of the intermediate classes immediately below the root;
+                                                                             6 The idea of the global classifiers (those in K ) generalizes as follows:
+intermediate classifiers for each non-leaf node are trained to                                                                ϕ
+                                                                          such a classifier may be associated with any node of the classification tree
+classify inputs determined to belong to the intermediate class            that is above the two levels levels, and classifies an input into any class,
+associated with that node into the classes immediately below              intermediate or base, in the subtree that is rooted at that node.
+
+
+
+
+                                                                      9
+                                  Intermediate                         Global                       SUV                      COUPE
+    Classifiers
+                             K0                K1             K2                 K3                  K4               K5             K6                                                      Kdet
+ Modality, params        Both, 129698    Both, 356610   Both, 130469       Both, 1217109      Acoustic, 80355    Acoustic, 80355 Both, 129955                                                 -
+   Success rate              76.1              87.6           66.8              99.9                  1               91.1           94.9                                                     1
+  Execution time             80.8             317.0          104.7              869.9               80.9              80.9          104.5                                                   10000
+                                           TABLE IV: Classifiers for the vehicle detection case study (Section V-A).
+
+                                                                                                                                                            Cumulative Distribution Function (CDF)
+                                       Kdet                                                   400                                                     1.0
+
+
+
+
+                                                                                                                                  Cumulative Probability
+                                                                                                                                                      0.8
+                                                                                              300
+
+
+
+
+                                                                                   Latency (ms)
+                          K4                                                                                                                          0.6
+                                        K4       Kdet                                         200       Global
+                   SUV           SUV                                                                                                                  0.4
+                                                                                                        Hierarchy
+                                                                                              100       Fast first                                    0.2
+                                                                                                        Efficient first                                                  Optimal: 338
+   K2             K0        K1              K3    Kdet                                                                                                                   Worst: 1054
+                                                                                                        Optimal                                       0.0
+                                                                                                  0                                                           400 500 600 700 800 900 1000
+              COUPE            COUPE                                                                                Algorithms                                          Latency (ms)
+                                        K5       K6       K3        Kdet
+                          K5                                                          (a) Latency comparison of the algorithms. (b) Latency distribution of all cascades.
+                                                                                                      Fig. 4: Vehicle detection case study results (Section V-A).
+                                       K6        K3      Kdet
+
+Fig. 3: Optimal cascade for the vehicle detection case Study (Section V-A).        where the selected cascades are K0 → K2 → K1 → K3 and
+                                                                                   K0 → K2 → K3 → K1 , respectively.
+                                                                                   B. HAR Case Study
+and two specialized classifiers for the COUPE class (K5 and                        Data collection and pre-processing. For this case study, we
+K6 ). These selected classifiers are applied to the test data to                   use the RealWorld-HAR dataset [17], a dataset for human
+obtain class predictions and confidence scores. Using these,                       activity recognition with data from sensors attached to 7
+we construct empirical probability tables as described in                          positions on the human test subjects, while they perform one
+Section III, and record average and worst-case execution times.                    of the 8 activities. The dataset provides the accelerometer data
+A summary of the classifiers with the number of parameters                         (used in our study), as well as GPS, gyroscope, light, magnetic
+and modality choices can be found in Table IV.                                     field, and sound level measurements, all collected at 50Hz.
+Findings. We compare the optimal cascade generated by                                 We group the 8 activity types into two categories:
+the proposed algorithm (labeled Optimal) to four baselines:                        intermediate class MOVING including CLIMBING - UP,
+(1) Global: Best cascade using only global classifiers. (2) Hi-                    CLIMBING - DOWN , WALKING , JUMPING , and RUNNING ;
+erarchy: Best cascade using only intermediate and specialized                      intermediate class STATIC including STANDING, SITTING,
+classifiers. (3) Fast first: Classifiers ordered by increasing exe-                and LYING. We use only the accelerometer data collected
+cution time. (4) Efficient first: Classifiers ordered by increasing                from the shin sensor and segment the data into 4-second
+(Non-IDK rate)/(execution time).                                                   windows. Similarly, we convert the sensor input into STFT
+   The expected execution duration of all algorithms is com-                       form and train 3 types of DeepSense-based IDK classifiers:
+pared in Figure 4a. The proposed algorithm finds the cascade                       (i) global classifiers that classify inputs into one of the 8
+with the minimum expected execution duration. Compared                             base activity classes, (ii) intermediate classifiers that classify
+with the best baseline algorithm, it reduces latency by 11.2%.                     inputs as either STATIC or MOVING, and (iii) specialized
+A cumulative latency distribution of all possible cascades in a                    classifiers that classify inputs within the STATIC or MOVING
+reduced setting (with fewer classifiers) is shown in Figure 4b,                    group.
+with the latency of the optimal cascade our algorithm found                           In addition to the three model sizes used in the vehicle study,
+and the latency of the worst cascade highlighted. Compared                         we introduce a smaller classifier, observing that it achieves
+with the other possible cascades, the optimal one has signif-                      high accuracy with low cost, especially for the intermediate
+icantly shorter expected execution time. The worst cascade                         classification task. We assume a required classification accu-
+takes significantly longer to execute, showing that organizing                     racy of 0.85 and use required precision of 0.85 for the global
+the classifiers in the wrong way can lead to poor performance.                     classifiers, 0.94 for the intermediate classifiers, and 0.91 for
+A reduced setting is used here because the total number of                         the specialized classifiers to compute per-classifier confidence
+possible cascades grows exponentially with the number of                           thresholds, leading to at most 15% error, no matter which
+classifiers, making exhaustive evaluation infeasible in the full                   classifiers are used.
+setting. The optimal classification strategy determined by our                     Profiling. We select two intermediate classifiers (K0 and K1 ),
+algorithm for this case study is shown in Figure 3. This                           3 global classifiers (K2 , K3 and K4 ), 3 specialized classifiers
+is not a strategy one would intuitively have considered: a                         (K5 , K6 and K7 ), for the STATIC class, and 4 specialized
+global classifier (K2 ) is used before any intermediate classifier.                classifiers, (K8 , K9 , K10 and K11 ), for the MOVING class.
+While the first intermediate classifier is the fastest and most                    Similar to the previous case study, we evaluate all classifiers
+efficient, it is not selected first. The optimal cascade also                      on the test set, record their predictions and confidence levels,
+differs from both the Fast first policy and the Efficient first,                   construct the empirical probability tables, and measure both
+
+
+
+                                                                              10
+                                Intermediate            Global                       STATIC                                       MOVING
+        Classifiers
+                                K0      K1      K2      K3          K4         K5      K6       K7       K8                    K9     K10                               K11           Kdet
+       Parameters              5134    22978   77320  360072      1111256     5167 23043       76035    5233                  23173  76549                             358533          -
+    Success rate (%)           40.2     99.9    67.2    92.4          1       84.3    92.4      97.1    52.0                   69.0   91.7                               95.5          1
+   Execution time (ms)         31.3     47.0    77.0   242.2       571.8      31.1    46.4      69.6    30.9                   50.8   69.8                              241.3        10000
+                                                TABLE V: Classifiers for the HAR case study (Section V-B).
+
+
+                                                                                           200                                                            Cumulative Distribution Function (CDF)
+             K5          K7           K2       K3         K4       Kdet                                                                             1.0
+    STATIC
+
+
+
+
+                                                                                                                                Cumulative Probability
+                                                                                           150                                                      0.8
+
+
+
+
+                                                                                Latency (ms)
+   K1         K4          Kdet                                                                                                                      0.6
+                                                                                           100      Global
+    MOVING                                                                                                                                          0.4
+                                                                                                    Hierarchy
+             K8          K10          K2       K3         K9       Kdet                        50   Fast first                                      0.2
+                                                                                                    Efficient first                                                    Optimal: 125
+     Fig. 5: Optimal cascade for the HAR case study (Section V-B).                                  Optimal                                         0.0                Worst: 1045
+                                                                                                0                                                          200     400   600      800      1000
+                                                                                                                Algorithms                                            Latency (ms)
+average and worst-case execution times. A summary of the                           (a) Latency comparison of the algorithms. (b) Latency distribution of all cascades.
+classifiers can be found in Table V.                                                                      Fig. 6: HAR case study results (Section V-B).
+Findings. The expected execution duration of all algorithms
+is compared in Figure 6a. Our algorithm produces the cascade
+with the lowest expected execution time, reducing latency
+by 7.4% compared with the best baseline. Figure 6b shows                        case of class hierarchies. It establishes that hierarchical IDK
+the latency distribution across all cascades in a reduced-                      classification is not decomposable to a sequence of flat IDK
+scale setting. Compared with the other possible cascades, the                   cascade classification problems without loss of optimality.
+optimal one selected by our algorithm has significantly shorter                 Optimal holistic algorithms are therefore derived for exploiting
+expected execution time. The optimal cascade is shown in                        the hierarchical class structure, and evaluated on real classi-
+Figure 5. It is different from the one for the vehicle case                     fiers and sensor data from two application domains. Results
+study, and it is also counterintuitive. Instead of starting with                demonstrate the advantages of holistic optimization.
+any global classifier, or starting with the smaller intermediate                   This work may be extended in several directions. While
+classifier K0 , it directly goes to the larger but more efficient               we have focused on IDK classifiers primarily due to the large
+intermediate classifier K1 . Then it skipped classifiers K2 and                 body of pre-existing work on them in the real-time community,
+K3 , and directly selected K4 . In the STATIC branch, the                       our ideas and techniques generalize to other situations where
+selected optimal cascade skipped the specialized classifier K6 ,                hierarchical structure may be exploited to reduce latency.
+which differs from the one generated by Fast first and Efficient                With minor modifications, our algorithms can be adapted
+first: K5 → K6 → K7 → K2 → K3 → K4 . In the MOVING                              to provide optimal classification strategies using early exit
+branch, the cascade generated by the Fast first and Efficient                   classifiers [18]±[20] (rather than IDK ones). They can also
+first is K8 → K9 → K10 → K2 → K11 → K3 → K4 . In                                be extended to handle mixture-of-experts [21]±[24] situations,
+contrast, the optimal cascade delays classifier K9 until after the              where resource constraints prevent the invocation of all experts
+slower special classifier K10 , and also after the much slower                  at the same time, calling for optimally staged processing, with
+global classifiers K2 and K3 . It also skips classifier K11                     one (or a bounded number of) experts per stage.
+altogether, even though it is faster than both K2 and K3 . This
+                                                                                   The work in this paper focused on scenarios where a single
+demonstrates that due to the complex probability dependencies
+                                                                                class label is sufficient to describe the environment at any
+in the data, one cannot easily determine the optimal cascade
+                                                                                given time. In reality, many perception problems involve multi-
+by looking at the classifier performance metrics.
+                                                                                label classification (e.g., recognizing all car types in a video
+C. Algorithm Execution Times                                                    frame). One solution to handle such problems might be to
+   We profile the time and memory required by the cascade-                      decompose them into single-label problems. For example,
+synthesis algorithm to find the optimal cascade, using the vehi-                background subtraction can be used to identify the approxi-
+cle detection example. Experiments are run on a workstation                     mate locations of all moving objects in a frame, then pass each
+computer (Lambda Labs Vector with an AMD Threadripper                           object to a different classifier cascade. Another solution could
+Pro 3975WX at 3.50 GHz, 128GB of RAM, running Ubuntu                            be to extend this work to cascades of multi-label classifiers.
+20.04). For a problem with 5 intermediate classifiers, 5 global                    Finally, domain shift is a key problem with all machine-
+classifiers, and 5 specialized classifiers for each intermediate                learning, including IDK classifiers. When input data are from
+class, the algorithm takes 155 minutes and a maximum mem-                       a substantially different distribution than the one used for train-
+ory of 128 MB to derive the optimal solution.                                   ing, the confidence values returned by the IDK classifiers may
+                                                                                be incorrect. Out-of-distribution detection techniques [25]±
+                          VI. C ONCLUSIONS                                      [27] may be needed to detect domain shift and force classifiers
+  The research discussed in this paper extends the use of                       to return an IDK instead. These topics will be investigated in
+IDK cascades for purposes of real-time classification to the                    our future work.
+
+
+
+                                                                           11
+                        ACKNOWLEDGMENTS                                              [15] Sanjoy Baruah, Iain Bate, Alan Burns, and Robert Davis. Optimal
+                                                                                          synthesis of fault-tolerant IDK cascades for real-time classification. In
+  Add more here... Research reported in this paper was                                    Proceedings of the 30th IEEE Real-Time and Embedded Technology and
+sponsored in part by DEVCOM ARL under Cooperative                                         Applications Symposium (RTAS 2024). IEEE, 2024.
+Agreement W911NF-172-0196, NSF CNS 20-38817, and the                                 [16] Jinyang Li, Yizhuo Chen, Ruijie Wang, Tomoyoshi Kimura, Tianshi
+                                                                                          Wang, You Lyu, Hongjue Zhao, Binqi Sun, Shangchen Wu, Yigong
+Boeing Company.                                                                           Hu, Denizhan Kara, Beitong Tian, Klara Nahrstedt, Suhas Diggavi,
+  Sk B: NSF CNS-2141256, CNS-2229290 (CPS), and CNS-                                      Jae H. Kim, Greg Kimberly, Guijun Wang, Maggie Wigness, and Tarek
+2502855 (CPS)                                                                             Abdelzaher. RestoreML: Practical unsupervised tuning of deployed
+                                                                                          intelligent iot systems. In 2025 21st International Conference on
+                             R EFERENCES                                                  Distributed Computing in Smart Systems and the Internet of Things
+                                                                                          (DCOSS-IoT). IEEE, 2025.
+ [1] Dhiraj Neupane and Jongwon Seok. A review on deep learning-                     [17] Timo Sztyler and Heiner Stuckenschmidt. On-body localization of wear-
+     based approaches for automatic sonar target recognition. Electronics,                able devices: An investigation of position-aware activity recognition.
+     9(11):1972, 2020.                                                                    In 2016 IEEE international conference on pervasive computing and
+ [2] Khalid El-Darymli, Eric W Gill, Peter Mcguire, Desmond Power, and                    communications (PerCom), pages 1±9. IEEE, 2016.
+     Cecilia Moloney. Automatic target recognition in synthetic aperture             [18] Surat Teerapittayanon, Bradley McDanel, and H.T. Kung. BranchyNet:
+     radar imagery: A state-of-the-art review. IEEE access, 4:6014±6058,                  Fast inference via early exiting from deep neural networks. In 2016
+     2016.                                                                                23rd International Conference on Pattern Recognition (ICPR), pages
+ [3] Kaixuan Chen, Dalin Zhang, Lina Yao, Bin Guo, Zhiwen Yu, and                         2464±2469, 2016.
+     Yunhao Liu. Deep learning for sensor-based human activity recognition:          [19] Yamin Sepehri, Pedram Pad, Ahmet Caner YÈuzÈugÈuler, Pascal Frossard,
+     Overview, challenges, and opportunities. ACM Computing Surveys                       and L. Andrea Dunbar. Hierarchical training of deep neural networks
+     (CSUR), 54(4):1±40, 2021.                                                            using early exiting. IEEE Transactions on Neural Networks and
+ [4] Shuochao Yao, Shaohan Hu, Yiran Zhao, Aston Zhang, and Tarek                         Learning Systems, 36(4):6271±6285, 2025.
+     Abdelzaher. Deepsense: A unified deep learning framework for time-              [20] Fatih Ilhan, Selim Furkan Tekin, Sihao Hu, Tiansheng Huang, Ka-Ho
+     series mobile sensing data processing. In Proceedings of the 26th                    Chow, and Ling Liu. Hierarchical deep neural network inference for
+     international conference on world wide web, pages 351±360, 2017.                     device-edge-cloud systems. In Companion Proceedings of the ACM Web
+ [5] Xin Wang, Yujia Luo, Daniel Crankshaw, Alexey Tumanov, and                           Conference 2023, WWW ’23 Companion, page 302±305, New York,
+     Joseph E. Gonzalez. IDK cascades: Fast deep learning by learning not                 NY, USA, 2023. Association for Computing Machinery.
+     to overthink. CoRR, abs/1706.00885, 2017.                                       [21] Robert A Jacobs, Michael I Jordan, Steven J Nowlan, and Geoffrey E
+ [6] Xin Wang, Yujia Luo, Daniel Crankshaw, Alexey Tumanov, and                           Hinton. Adaptive mixtures of local experts. Neural computation,
+     Joseph E. Gonzalez. IDK cascades: Fast deep learning by learning                     3(1):79±87, 1991.
+     not to overthink. In Proceedings of the Thirty-Fourth Conference on             [22] Noam Shazeer, Azade Mirhoseini, Krzysztof Maziarz, Andy Davis,
+     Uncertainty in Artificial Intelligence. AUAI Press, August 2018.                     Quoc V Le, Wei Chen, Mohammad Norouzi, and Jeff Dean. Outra-
+ [7] Nicholas Kashani Motlagh, Jim Davis, Tim Anderson, and Jeremy                        geously large neural networks: The sparsely-gated mixture-of-experts
+     Gwinnup. Learning when to say ªI Don’t Knowº. In George Bebis,                       layer. arXiv preprint arXiv:1701.06538, 2017.
+     Bo Li, Angela Yao, Yang Liu, Ye Duan, Manfred Lau, Rajiv Khadka,                [23] William Fedus, Barret Zoph, and Noam Shazeer. Switch transformers:
+     Ana Crisan, and Remco Chang, editors, Advances in Visual Computing,                  Scaling to trillion parameter models with simple and efficient sparsity.
+     pages 196±210, Cham, 2022. Springer International Publishing.                        Journal of Machine Learning Research, 23(127):1±39, 2022.
+ [8] Roi Cohen, Konstantin Dobler, Eden Biran, and Gerard de Melo. I                 [24] Dmitry Lepikhin, Hieu Xu, Yanqi Hoffmann, Yaroslav Aharoni, Dianne
+     don't know: Explicit modeling of uncertainty with an IDK token. In                   Chen, Mia Johnson, Orhan Lee, Adam Metzler, Zhifeng Qi, James
+     A. Globerson, L. Mackey, D. Belgrave, A. Fan, U. Paquet, J. Tomczak,                 Smith, et al. Gshard: Scaling giant models with conditional computation
+     and C. Zhang, editors, Advances in Neural Information Processing                     and automatic sharding. arXiv preprint arXiv:2006.16668, 2020.
+     Systems, volume 37, pages 10935±10958. Curran Associates, Inc., 2024.           [25] Weitang Liu, Xiaoyun Wang, John Owens, and Yixuan Li. Energy-based
+ [9] Weilin Cai, Juyong Jiang, Fan Wang, Jing Tang, Sunghun Kim, and                      out-of-distribution detection. Advances in neural information processing
+     Jiayi Huang. A survey on mixture of experts. arXiv preprint                          systems, 33:21464±21475, 2020.
+     arXiv:2407.06204, 2024.                                                         [26] Jie Ren, Peter J Liu, Emily Fertig, Jasper Snoek, Ryan Poplin, Mark
+[10] Shuochao Yao, Yiran Zhao, Huajie Shao, Aston Zhang, Chao Zhang,                      Depristo, Joshua Dillon, and Balaji Lakshminarayanan. Likelihood
+     Shen Li, and Tarek Abdelzaher. Rdeepsense: Reliable deep mobile                      ratios for out-of-distribution detection. Advances in neural information
+     computing models with uncertainty estimations. Proceedings of the ACM                processing systems, 32, 2019.
+     on interactive, mobile, wearable and ubiquitous technologies, 1(4):1±26,        [27] Jingkang Yang, Kaiyang Zhou, Yixuan Li, and Ziwei Liu. Generalized
+     2018.                                                                                out-of-distribution detection: A survey. International Journal of Com-
+[11] Tarek Abdelzaher, Kunal Agrawal, Sanjoy Baruah, Alan Burns, Robert I.                puter Vision, 132(12):5635±5662, 2024.
+     Davis, Zhishan Guo, and Yigong Hu. Scheduling IDK classifiers with
+     arbitrary dependences to minimize the expected time to successful
+     classification. Real-Time Systems, March 2023.
+[12] Sanjoy Baruah, Alan Burns, Robert Davis, and Yue Wu. Optimally
+     ordering IDK classifiers subject to deadlines. Real Time Syst., 2022.
+[13] Tarek Abdelzaher, Sanjoy Baruah, Iain Bate, Alan Burns, Robert I.
+     Davis, and Yigong Hu. Scheduling classifiers for real-time hazard
+     perception considering functional uncertainty. In Proceedings of the
+     31st International Conference on Real-Time Networks and Systems,
+     RTNS 2023, New York, NY, USA, 2023. Association for Computing
+     Machinery.
+[14] Sanjoy Baruah, Alan Burns, and Robert I. Davis. Optimal synthesis
+     of robust IDK classifier cascades. In Claire Pagetti and Alessandro
+     Biondi, editors, 2023 International Conference on Embedded Software,
+     EMSOFT 2023, Hamburg, Germany, September 2023. ACM, 2023.
+
+
+
+
+                                                                                12
+
