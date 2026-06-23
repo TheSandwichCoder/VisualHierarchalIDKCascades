@@ -129,7 +129,7 @@ def _run_candidate(candidate, dataset, batch_size):
 
 def collect_empirical_outcomes(
     output_path="models/stats/empirical_outcomes.pkl",
-    min_precision=0.95,
+    min_precision=0.85,
     batch_size=64,
     max_samples=None,
     specialized_path="models/stats/specialized_stats.pkl",
