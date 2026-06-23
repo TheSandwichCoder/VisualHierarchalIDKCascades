@@ -281,7 +281,8 @@ class EmpiricalHierarchyOptimizer:
 
 
 def optimize_empirical_hierarchy(path="models/stats/empirical_outcomes.pkl"):
-    optimizer = EmpiricalHierarchyOptimizer(load_empirical_outcomes(path))
+    df = load_empirical_outcomes(path)
+    optimizer = EmpiricalHierarchyOptimizer(df)
     cascade = optimizer.synthesize()
     return optimizer, cascade
 
