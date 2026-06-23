@@ -28,4 +28,7 @@ MobileNet + MLP head Identifier
 {'min_precision': 0.85, 'accuracy': 0.5553, 'average_runtime': 0.03887959836043883, 'correct': 5553, 'total': 10000}
 {'min_precision': 0.9, 'accuracy': 0.605, 'average_runtime': 0.0499492357987212, 'correct': 6050, 'total': 10000}
 {'min_precision': 0.95, 'accuracy': 0.6497, 'average_runtime': 0.06283279696934624, 'correct': 6497, 'total': 10000}
+
+Proper Identifier
+{'accuracy': 0.544, 'average_runtime': 0.03327682137048105, 'correct': 5440, 'total': 10000, 'expected_cost': 0.01291060629929683}
 """
