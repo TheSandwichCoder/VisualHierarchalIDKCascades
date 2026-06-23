@@ -1,4 +1,4 @@
-#Creating IDK Hierarchy Based on ImageNet Dataset#
+##Creating IDK Hierarchy Based on ImageNet Dataset##
 
 Trained on ImageNet subtrain
 Tested on ImageNetV2 (confidence threshold determined by ImageNetV2)
