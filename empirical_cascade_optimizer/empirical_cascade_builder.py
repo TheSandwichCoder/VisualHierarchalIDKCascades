@@ -5,10 +5,15 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from empirical_hierarchy_optimizer import optimize_empirical_hierarchy
-from get_models_stats import load_model_from_checkpoint
+try:
+    from ._paths import ROOT as _ROOT
+except ImportError:
+    from _paths import ROOT as _ROOT
+
+from empirical_cascade_optimizer.empirical_hierarchy_optimizer import optimize_empirical_hierarchy
+from model_trainer.get_models_stats import load_model_from_checkpoint
 from globals import device
-from train_models import imagenetv2_dataset
+from model_trainer.train_models import imagenetv2_dataset
 
 
 @dataclass

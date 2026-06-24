@@ -6,8 +6,13 @@ import torchvision
 from torch.utils.data import DataLoader, Subset
 from tqdm import tqdm
 
+try:
+    from ._paths import ROOT as _ROOT
+except ImportError:
+    from _paths import ROOT as _ROOT
+
 from globals import device
-from train_models import (
+from model_trainer.train_models import (
     ImageNetLogitLinearRouter,
     ImageNetLogitMLPRouter,
     LogitRouterPipeline,

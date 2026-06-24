@@ -6,15 +6,20 @@ import torch
 from torch.utils.data import DataLoader, Subset
 from tqdm import tqdm
 
-from get_models_stats import load_model_from_checkpoint
+try:
+    from ._paths import ROOT as _ROOT
+except ImportError:
+    from _paths import ROOT as _ROOT
+
+from model_trainer.get_models_stats import load_model_from_checkpoint
 from globals import device
-from optimize_cascade import (
+from failed_tests.optimize_cascade import (
     GlobClassifierNode,
     IdenClassifierNode,
     SpecClassifierNode,
     get_classifiers,
 )
-from train_models import data, imagenetv2_dataset
+from model_trainer.train_models import data, imagenetv2_dataset
 
 
 @dataclass(frozen=True)

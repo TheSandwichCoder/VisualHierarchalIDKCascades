@@ -4,7 +4,13 @@ from tqdm import tqdm
 from torch import nn
 import torch
 from pathlib import Path
-from torch.utils.data import Subset, DataLoader, WeightedRandomSampler, random_split
+from torch.utils.data import Dataset, Subset, DataLoader, WeightedRandomSampler, random_split
+
+try:
+    from ._paths import ROOT as _ROOT
+except ImportError:
+    from _paths import ROOT as _ROOT
+
 from globals import device
 from read_json import load_groups
 import torchvision.transforms as transforms
@@ -22,8 +28,35 @@ ImageNetTransforms = preprocess = transforms.Compose([
 ])
 
 data = load_groups()
-subtrain_dataset = ImageNetSubset(location="data", transform=ImageNetTransforms)
-imagenetv2_dataset = ImageNetV2Dataset(location="data", transform=ImageNetTransforms)
+DATASETS_PATH = Path("data") / "datasets"
+
+
+class LazyDataset(Dataset):
+    def __init__(self, factory):
+        self.factory = factory
+        self._dataset = None
+
+    def _load(self):
+        if self._dataset is None:
+            self._dataset = self.factory()
+        return self._dataset
+
+    def __len__(self):
+        return len(self._load())
+
+    def __getitem__(self, index):
+        return self._load()[index]
+
+    def __getattr__(self, name):
+        return getattr(self._load(), name)
+
+
+subtrain_dataset = LazyDataset(
+    lambda: ImageNetSubset(location=DATASETS_PATH, transform=ImageNetTransforms)
+)
+imagenetv2_dataset = LazyDataset(
+    lambda: ImageNetV2Dataset(location=DATASETS_PATH, transform=ImageNetTransforms)
+)
 
 
 def get_resnet_18(num_classes = None):

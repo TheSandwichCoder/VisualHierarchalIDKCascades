@@ -4,6 +4,11 @@ from pathlib import Path
 
 import pandas as pd
 
+try:
+    from ._paths import ROOT as _ROOT
+except ImportError:
+    from _paths import ROOT as _ROOT
+
 from read_json import load_groups
 
 

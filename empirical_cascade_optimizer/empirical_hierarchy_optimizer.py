@@ -4,7 +4,12 @@ from functools import lru_cache
 import numpy as np
 import pandas as pd
 
-from empirical_outcomes import load_empirical_outcomes
+try:
+    from ._paths import ROOT as _ROOT
+except ImportError:
+    from _paths import ROOT as _ROOT
+
+from empirical_cascade_optimizer.empirical_outcomes import load_empirical_outcomes
 
 
 @dataclass
