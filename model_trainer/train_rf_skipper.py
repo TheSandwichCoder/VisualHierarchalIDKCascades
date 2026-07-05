@@ -13,6 +13,7 @@ from model_trainer.get_skipper_dataset import (
     CASCADE_TYPE_TO_LABEL,
     LABEL_TO_CASCADE_TYPE,
     create_rf_skipper_dataset,
+    resolve_repo_path,
 )
 
 
@@ -62,7 +63,7 @@ def output_to_pred(values):
 
 
 def _load_payload(dataset_path):
-    dataset_path = Path(dataset_path)
+    dataset_path = resolve_repo_path(dataset_path)
     if not dataset_path.exists():
         raise FileNotFoundError(
             f"{dataset_path} does not exist. Create it with "
@@ -150,7 +151,7 @@ def train_rf_skipper(
         train_test_split,
     ) = _load_sklearn()
 
-    if create_dataset_if_missing and not Path(dataset_path).exists():
+    if create_dataset_if_missing and not resolve_repo_path(dataset_path).exists():
         create_rf_skipper_dataset(dataset_path=dataset_path)
 
     X, y, payload = load_rf_training_data(
@@ -183,7 +184,7 @@ def train_rf_skipper(
     report = classification_report(y_test, y_pred, zero_division=0)
     matrix = confusion_matrix(y_test, y_pred).tolist()
 
-    output_path = Path(output_path)
+    output_path = resolve_repo_path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     saved_payload = {
         "model": rf,

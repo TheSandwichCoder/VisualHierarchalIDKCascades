@@ -15,7 +15,7 @@ except ImportError:
     from _paths import ROOT as _ROOT
 
 from empirical_cascade_optimizer.empirical_hierarchy_optimizer import optimize_empirical_hierarchy
-from model_trainer.get_models_stats import load_model_from_checkpoint
+from model_trainer.get_models_stats import load_model_from_checkpoint, resolve_repo_path
 from globals import device
 from model_trainer.train_models import imagenetv2_dataset
 
@@ -43,11 +43,23 @@ class CascadeTrace:
     initial_returned_idk: bool
 
 
+# Temporary runtime-only threshold overrides. Remove this entry or set it back
+# to 0.95640510 to restore the current stats-derived resnet18 threshold.
+TEMP_CONFIDENCE_THRESHOLDS = {
+    "resnet18": 0.65,
+}
+
+
 class RuntimeClassifier:
     def __init__(self, candidate_id, metadata, model_cache):
         self.candidate_id = candidate_id
         self.kind = metadata["kind"]
-        self.threshold = float(metadata.get("threshold", 0.0))
+        self.threshold = float(
+            TEMP_CONFIDENCE_THRESHOLDS.get(
+                metadata.get("name"),
+                metadata.get("threshold", 0.0),
+            )
+        )
         self.checkpoint_path = metadata["checkpoint_path"]
         self.model_cache = model_cache
         self.model = None
@@ -213,7 +225,7 @@ def _extract_model_input(model, sample, input_representation):
 
 def _same_checkpoint_path(left, right):
     try:
-        return Path(left).resolve() == Path(right).resolve()
+        return resolve_repo_path(left).resolve() == resolve_repo_path(right).resolve()
     except TypeError:
         return False
 
@@ -224,7 +236,7 @@ class RFSkipper:
         skipper_path,
         input_checkpoint_path="models/intermediate/mobilenet_v3_small_identifier.pth",
     ):
-        self.skipper_path = Path(skipper_path)
+        self.skipper_path = resolve_repo_path(skipper_path)
         self.payload = self._load_payload(self.skipper_path)
         self.model = self.payload["model"]
         self.input_representation = self.payload.get("input_representation", "probabilities")
@@ -312,7 +324,7 @@ class MLPSkipper:
         skipper_path,
         input_checkpoint_path="models/intermediate/mobilenet_v3_small_identifier.pth",
     ):
-        self.skipper_path = Path(skipper_path)
+        self.skipper_path = resolve_repo_path(skipper_path)
         self.payload = torch.load(self.skipper_path, map_location=device)
         self.input_representation = self.payload.get("input_representation", "features")
         self.binary_detector_label = bool(self.payload.get("binary_detector_label", True))
@@ -720,7 +732,6 @@ def benchmark_empirical_cascade(
         "profile": cascade.profile(),
     }
 
-    print(cascade.profile())
     print(result)
     return result
 

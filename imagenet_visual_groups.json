@@ -1,0 +1,4449 @@
+{
+  "metadata": {
+    "description": "Reconstructed ImageNet visual groups for IDK hierarchy cascades.",
+    "source_checkpoint": "models/logit_router/resnet152_logit_router.pth",
+    "class_name_source": "torchvision.models.ResNet18_Weights.DEFAULT.meta[\"categories\"]",
+    "num_groups": 73,
+    "num_classes": 1000
+  },
+  "groups": [
+    {
+      "id": "fish_sharks_and_rays",
+      "name": "Fish, sharks, and rays",
+      "classes": [
+        {
+          "index": 0,
+          "name": "tench"
+        },
+        {
+          "index": 1,
+          "name": "goldfish"
+        },
+        {
+          "index": 2,
+          "name": "great white shark"
+        },
+        {
+          "index": 3,
+          "name": "tiger shark"
+        },
+        {
+          "index": 4,
+          "name": "hammerhead"
+        },
+        {
+          "index": 5,
+          "name": "electric ray"
+        },
+        {
+          "index": 6,
+          "name": "stingray"
+        },
+        {
+          "index": 389,
+          "name": "barracouta"
+        },
+        {
+          "index": 390,
+          "name": "eel"
+        },
+        {
+          "index": 391,
+          "name": "coho"
+        },
+        {
+          "index": 392,
+          "name": "rock beauty"
+        },
+        {
+          "index": 393,
+          "name": "anemone fish"
+        },
+        {
+          "index": 394,
+          "name": "sturgeon"
+        },
+        {
+          "index": 395,
+          "name": "gar"
+        },
+        {
+          "index": 396,
+          "name": "lionfish"
+        },
+        {
+          "index": 397,
+          "name": "puffer"
+        }
+      ]
+    },
+    {
+      "id": "domestic_and_ground_birds",
+      "name": "Domestic and large ground birds",
+      "classes": [
+        {
+          "index": 7,
+          "name": "cock"
+        },
+        {
+          "index": 8,
+          "name": "hen"
+        },
+        {
+          "index": 9,
+          "name": "ostrich"
+        }
+      ]
+    },
+    {
+      "id": "songbirds_and_small_perching_birds",
+      "name": "Songbirds and small perching birds",
+      "classes": [
+        {
+          "index": 10,
+          "name": "brambling"
+        },
+        {
+          "index": 11,
+          "name": "goldfinch"
+        },
+        {
+          "index": 12,
+          "name": "house finch"
+        },
+        {
+          "index": 13,
+          "name": "junco"
+        },
+        {
+          "index": 14,
+          "name": "indigo bunting"
+        },
+        {
+          "index": 15,
+          "name": "robin"
+        },
+        {
+          "index": 16,
+          "name": "bulbul"
+        },
+        {
+          "index": 17,
+          "name": "jay"
+        },
+        {
+          "index": 18,
+          "name": "magpie"
+        },
+        {
+          "index": 19,
+          "name": "chickadee"
+        },
+        {
+          "index": 20,
+          "name": "water ouzel"
+        }
+      ]
+    },
+    {
+      "id": "raptors_and_owls",
+      "name": "Raptors, carrion birds, and owls",
+      "classes": [
+        {
+          "index": 21,
+          "name": "kite"
+        },
+        {
+          "index": 22,
+          "name": "bald eagle"
+        },
+        {
+          "index": 23,
+          "name": "vulture"
+        },
+        {
+          "index": 24,
+          "name": "great grey owl"
+        }
+      ]
+    },
+    {
+      "id": "amphibians",
+      "name": "Amphibians",
+      "classes": [
+        {
+          "index": 25,
+          "name": "European fire salamander"
+        },
+        {
+          "index": 26,
+          "name": "common newt"
+        },
+        {
+          "index": 27,
+          "name": "eft"
+        },
+        {
+          "index": 28,
+          "name": "spotted salamander"
+        },
+        {
+          "index": 29,
+          "name": "axolotl"
+        },
+        {
+          "index": 30,
+          "name": "bullfrog"
+        },
+        {
+          "index": 31,
+          "name": "tree frog"
+        },
+        {
+          "index": 32,
+          "name": "tailed frog"
+        }
+      ]
+    },
+    {
+      "id": "turtles",
+      "name": "Turtles",
+      "classes": [
+        {
+          "index": 33,
+          "name": "loggerhead"
+        },
+        {
+          "index": 34,
+          "name": "leatherback turtle"
+        },
+        {
+          "index": 35,
+          "name": "mud turtle"
+        },
+        {
+          "index": 36,
+          "name": "terrapin"
+        },
+        {
+          "index": 37,
+          "name": "box turtle"
+        }
+      ]
+    },
+    {
+      "id": "lizards_and_crocodilians",
+      "name": "Lizards, crocodilians, and large reptiles",
+      "classes": [
+        {
+          "index": 38,
+          "name": "banded gecko"
+        },
+        {
+          "index": 39,
+          "name": "common iguana"
+        },
+        {
+          "index": 40,
+          "name": "American chameleon"
+        },
+        {
+          "index": 41,
+          "name": "whiptail"
+        },
+        {
+          "index": 42,
+          "name": "agama"
+        },
+        {
+          "index": 43,
+          "name": "frilled lizard"
+        },
+        {
+          "index": 44,
+          "name": "alligator lizard"
+        },
+        {
+          "index": 45,
+          "name": "Gila monster"
+        },
+        {
+          "index": 46,
+          "name": "green lizard"
+        },
+        {
+          "index": 47,
+          "name": "African chameleon"
+        },
+        {
+          "index": 48,
+          "name": "Komodo dragon"
+        },
+        {
+          "index": 49,
+          "name": "African crocodile"
+        },
+        {
+          "index": 50,
+          "name": "American alligator"
+        },
+        {
+          "index": 51,
+          "name": "triceratops"
+        }
+      ]
+    },
+    {
+      "id": "snakes",
+      "name": "Snakes",
+      "classes": [
+        {
+          "index": 52,
+          "name": "thunder snake"
+        },
+        {
+          "index": 53,
+          "name": "ringneck snake"
+        },
+        {
+          "index": 54,
+          "name": "hognose snake"
+        },
+        {
+          "index": 55,
+          "name": "green snake"
+        },
+        {
+          "index": 56,
+          "name": "king snake"
+        },
+        {
+          "index": 57,
+          "name": "garter snake"
+        },
+        {
+          "index": 58,
+          "name": "water snake"
+        },
+        {
+          "index": 59,
+          "name": "vine snake"
+        },
+        {
+          "index": 60,
+          "name": "night snake"
+        },
+        {
+          "index": 61,
+          "name": "boa constrictor"
+        },
+        {
+          "index": 62,
+          "name": "rock python"
+        },
+        {
+          "index": 63,
+          "name": "Indian cobra"
+        },
+        {
+          "index": 64,
+          "name": "green mamba"
+        },
+        {
+          "index": 65,
+          "name": "sea snake"
+        },
+        {
+          "index": 66,
+          "name": "horned viper"
+        },
+        {
+          "index": 67,
+          "name": "diamondback"
+        },
+        {
+          "index": 68,
+          "name": "sidewinder"
+        }
+      ]
+    },
+    {
+      "id": "arachnids_and_many_legged_invertebrates",
+      "name": "Arachnids and many-legged invertebrates",
+      "classes": [
+        {
+          "index": 69,
+          "name": "trilobite"
+        },
+        {
+          "index": 70,
+          "name": "harvestman"
+        },
+        {
+          "index": 71,
+          "name": "scorpion"
+        },
+        {
+          "index": 72,
+          "name": "black and gold garden spider"
+        },
+        {
+          "index": 73,
+          "name": "barn spider"
+        },
+        {
+          "index": 74,
+          "name": "garden spider"
+        },
+        {
+          "index": 75,
+          "name": "black widow"
+        },
+        {
+          "index": 76,
+          "name": "tarantula"
+        },
+        {
+          "index": 77,
+          "name": "wolf spider"
+        },
+        {
+          "index": 78,
+          "name": "tick"
+        },
+        {
+          "index": 79,
+          "name": "centipede"
+        }
+      ]
+    },
+    {
+      "id": "game_birds",
+      "name": "Game birds",
+      "classes": [
+        {
+          "index": 80,
+          "name": "black grouse"
+        },
+        {
+          "index": 81,
+          "name": "ptarmigan"
+        },
+        {
+          "index": 82,
+          "name": "ruffed grouse"
+        },
+        {
+          "index": 83,
+          "name": "prairie chicken"
+        },
+        {
+          "index": 84,
+          "name": "peacock"
+        },
+        {
+          "index": 85,
+          "name": "quail"
+        },
+        {
+          "index": 86,
+          "name": "partridge"
+        }
+      ]
+    },
+    {
+      "id": "parrots_and_tropical_birds",
+      "name": "Parrots and tropical birds",
+      "classes": [
+        {
+          "index": 87,
+          "name": "African grey"
+        },
+        {
+          "index": 88,
+          "name": "macaw"
+        },
+        {
+          "index": 89,
+          "name": "sulphur-crested cockatoo"
+        },
+        {
+          "index": 90,
+          "name": "lorikeet"
+        },
+        {
+          "index": 91,
+          "name": "coucal"
+        },
+        {
+          "index": 92,
+          "name": "bee eater"
+        },
+        {
+          "index": 93,
+          "name": "hornbill"
+        },
+        {
+          "index": 94,
+          "name": "hummingbird"
+        },
+        {
+          "index": 95,
+          "name": "jacamar"
+        },
+        {
+          "index": 96,
+          "name": "toucan"
+        }
+      ]
+    },
+    {
+      "id": "waterfowl",
+      "name": "Waterfowl",
+      "classes": [
+        {
+          "index": 97,
+          "name": "drake"
+        },
+        {
+          "index": 98,
+          "name": "red-breasted merganser"
+        },
+        {
+          "index": 99,
+          "name": "goose"
+        },
+        {
+          "index": 100,
+          "name": "black swan"
+        }
+      ]
+    },
+    {
+      "id": "marsupials_and_monotremes",
+      "name": "Marsupials and monotremes",
+      "classes": [
+        {
+          "index": 102,
+          "name": "echidna"
+        },
+        {
+          "index": 103,
+          "name": "platypus"
+        },
+        {
+          "index": 104,
+          "name": "wallaby"
+        },
+        {
+          "index": 105,
+          "name": "koala"
+        },
+        {
+          "index": 106,
+          "name": "wombat"
+        }
+      ]
+    },
+    {
+      "id": "marine_invertebrates_and_mollusks",
+      "name": "Marine invertebrates and mollusks",
+      "classes": [
+        {
+          "index": 107,
+          "name": "jellyfish"
+        },
+        {
+          "index": 108,
+          "name": "sea anemone"
+        },
+        {
+          "index": 109,
+          "name": "brain coral"
+        },
+        {
+          "index": 110,
+          "name": "flatworm"
+        },
+        {
+          "index": 111,
+          "name": "nematode"
+        },
+        {
+          "index": 112,
+          "name": "conch"
+        },
+        {
+          "index": 113,
+          "name": "snail"
+        },
+        {
+          "index": 114,
+          "name": "slug"
+        },
+        {
+          "index": 115,
+          "name": "sea slug"
+        },
+        {
+          "index": 116,
+          "name": "chiton"
+        },
+        {
+          "index": 117,
+          "name": "chambered nautilus"
+        }
+      ]
+    },
+    {
+      "id": "crustaceans",
+      "name": "Crustaceans",
+      "classes": [
+        {
+          "index": 118,
+          "name": "Dungeness crab"
+        },
+        {
+          "index": 119,
+          "name": "rock crab"
+        },
+        {
+          "index": 120,
+          "name": "fiddler crab"
+        },
+        {
+          "index": 121,
+          "name": "king crab"
+        },
+        {
+          "index": 122,
+          "name": "American lobster"
+        },
+        {
+          "index": 123,
+          "name": "spiny lobster"
+        },
+        {
+          "index": 124,
+          "name": "crayfish"
+        },
+        {
+          "index": 125,
+          "name": "hermit crab"
+        },
+        {
+          "index": 126,
+          "name": "isopod"
+        }
+      ]
+    },
+    {
+      "id": "wading_and_shore_birds",
+      "name": "Wading and shore birds",
+      "classes": [
+        {
+          "index": 127,
+          "name": "white stork"
+        },
+        {
+          "index": 128,
+          "name": "black stork"
+        },
+        {
+          "index": 129,
+          "name": "spoonbill"
+        },
+        {
+          "index": 130,
+          "name": "flamingo"
+        },
+        {
+          "index": 131,
+          "name": "little blue heron"
+        },
+        {
+          "index": 132,
+          "name": "American egret"
+        },
+        {
+          "index": 133,
+          "name": "bittern"
+        },
+        {
+          "index": 134,
+          "name": "crane bird"
+        },
+        {
+          "index": 135,
+          "name": "limpkin"
+        },
+        {
+          "index": 136,
+          "name": "European gallinule"
+        },
+        {
+          "index": 137,
+          "name": "American coot"
+        },
+        {
+          "index": 138,
+          "name": "bustard"
+        },
+        {
+          "index": 139,
+          "name": "ruddy turnstone"
+        },
+        {
+          "index": 140,
+          "name": "red-backed sandpiper"
+        },
+        {
+          "index": 141,
+          "name": "redshank"
+        },
+        {
+          "index": 142,
+          "name": "dowitcher"
+        },
+        {
+          "index": 143,
+          "name": "oystercatcher"
+        },
+        {
+          "index": 144,
+          "name": "pelican"
+        }
+      ]
+    },
+    {
+      "id": "seabirds_penguins_and_albatrosses",
+      "name": "Seabirds, penguins, and albatrosses",
+      "classes": [
+        {
+          "index": 145,
+          "name": "king penguin"
+        },
+        {
+          "index": 146,
+          "name": "albatross"
+        }
+      ]
+    },
+    {
+      "id": "marine_mammals",
+      "name": "Marine mammals",
+      "classes": [
+        {
+          "index": 147,
+          "name": "grey whale"
+        },
+        {
+          "index": 148,
+          "name": "killer whale"
+        },
+        {
+          "index": 149,
+          "name": "dugong"
+        },
+        {
+          "index": 150,
+          "name": "sea lion"
+        }
+      ]
+    },
+    {
+      "id": "toy_and_companion_dogs",
+      "name": "Toy and companion dogs",
+      "classes": [
+        {
+          "index": 151,
+          "name": "Chihuahua"
+        },
+        {
+          "index": 152,
+          "name": "Japanese spaniel"
+        },
+        {
+          "index": 153,
+          "name": "Maltese dog"
+        },
+        {
+          "index": 154,
+          "name": "Pekinese"
+        },
+        {
+          "index": 155,
+          "name": "Shih-Tzu"
+        },
+        {
+          "index": 156,
+          "name": "Blenheim spaniel"
+        },
+        {
+          "index": 157,
+          "name": "papillon"
+        },
+        {
+          "index": 158,
+          "name": "toy terrier"
+        }
+      ]
+    },
+    {
+      "id": "hound_dogs",
+      "name": "Hound dogs",
+      "classes": [
+        {
+          "index": 159,
+          "name": "Rhodesian ridgeback"
+        },
+        {
+          "index": 160,
+          "name": "Afghan hound"
+        },
+        {
+          "index": 161,
+          "name": "basset"
+        },
+        {
+          "index": 162,
+          "name": "beagle"
+        },
+        {
+          "index": 163,
+          "name": "bloodhound"
+        },
+        {
+          "index": 164,
+          "name": "bluetick"
+        },
+        {
+          "index": 165,
+          "name": "black-and-tan coonhound"
+        },
+        {
+          "index": 166,
+          "name": "Walker hound"
+        },
+        {
+          "index": 167,
+          "name": "English foxhound"
+        },
+        {
+          "index": 168,
+          "name": "redbone"
+        },
+        {
+          "index": 169,
+          "name": "borzoi"
+        },
+        {
+          "index": 170,
+          "name": "Irish wolfhound"
+        },
+        {
+          "index": 171,
+          "name": "Italian greyhound"
+        },
+        {
+          "index": 172,
+          "name": "whippet"
+        },
+        {
+          "index": 173,
+          "name": "Ibizan hound"
+        },
+        {
+          "index": 174,
+          "name": "Norwegian elkhound"
+        },
+        {
+          "index": 175,
+          "name": "otterhound"
+        },
+        {
+          "index": 176,
+          "name": "Saluki"
+        },
+        {
+          "index": 177,
+          "name": "Scottish deerhound"
+        },
+        {
+          "index": 178,
+          "name": "Weimaraner"
+        }
+      ]
+    },
+    {
+      "id": "terrier_dogs",
+      "name": "Terrier dogs",
+      "classes": [
+        {
+          "index": 179,
+          "name": "Staffordshire bullterrier"
+        },
+        {
+          "index": 180,
+          "name": "American Staffordshire terrier"
+        },
+        {
+          "index": 181,
+          "name": "Bedlington terrier"
+        },
+        {
+          "index": 182,
+          "name": "Border terrier"
+        },
+        {
+          "index": 183,
+          "name": "Kerry blue terrier"
+        },
+        {
+          "index": 184,
+          "name": "Irish terrier"
+        },
+        {
+          "index": 185,
+          "name": "Norfolk terrier"
+        },
+        {
+          "index": 186,
+          "name": "Norwich terrier"
+        },
+        {
+          "index": 187,
+          "name": "Yorkshire terrier"
+        },
+        {
+          "index": 188,
+          "name": "wire-haired fox terrier"
+        },
+        {
+          "index": 189,
+          "name": "Lakeland terrier"
+        },
+        {
+          "index": 190,
+          "name": "Sealyham terrier"
+        },
+        {
+          "index": 191,
+          "name": "Airedale"
+        },
+        {
+          "index": 192,
+          "name": "cairn"
+        },
+        {
+          "index": 193,
+          "name": "Australian terrier"
+        },
+        {
+          "index": 194,
+          "name": "Dandie Dinmont"
+        },
+        {
+          "index": 195,
+          "name": "Boston bull"
+        },
+        {
+          "index": 196,
+          "name": "miniature schnauzer"
+        },
+        {
+          "index": 197,
+          "name": "giant schnauzer"
+        },
+        {
+          "index": 198,
+          "name": "standard schnauzer"
+        },
+        {
+          "index": 199,
+          "name": "Scotch terrier"
+        },
+        {
+          "index": 200,
+          "name": "Tibetan terrier"
+        },
+        {
+          "index": 201,
+          "name": "silky terrier"
+        },
+        {
+          "index": 202,
+          "name": "soft-coated wheaten terrier"
+        },
+        {
+          "index": 203,
+          "name": "West Highland white terrier"
+        },
+        {
+          "index": 204,
+          "name": "Lhasa"
+        }
+      ]
+    },
+    {
+      "id": "retrievers_setters_and_spaniels",
+      "name": "Retrievers, setters, and spaniels",
+      "classes": [
+        {
+          "index": 205,
+          "name": "flat-coated retriever"
+        },
+        {
+          "index": 206,
+          "name": "curly-coated retriever"
+        },
+        {
+          "index": 207,
+          "name": "golden retriever"
+        },
+        {
+          "index": 208,
+          "name": "Labrador retriever"
+        },
+        {
+          "index": 209,
+          "name": "Chesapeake Bay retriever"
+        },
+        {
+          "index": 210,
+          "name": "German short-haired pointer"
+        },
+        {
+          "index": 211,
+          "name": "vizsla"
+        },
+        {
+          "index": 212,
+          "name": "English setter"
+        },
+        {
+          "index": 213,
+          "name": "Irish setter"
+        },
+        {
+          "index": 214,
+          "name": "Gordon setter"
+        },
+        {
+          "index": 215,
+          "name": "Brittany spaniel"
+        },
+        {
+          "index": 216,
+          "name": "clumber"
+        },
+        {
+          "index": 217,
+          "name": "English springer"
+        },
+        {
+          "index": 218,
+          "name": "Welsh springer spaniel"
+        },
+        {
+          "index": 219,
+          "name": "cocker spaniel"
+        },
+        {
+          "index": 220,
+          "name": "Sussex spaniel"
+        },
+        {
+          "index": 221,
+          "name": "Irish water spaniel"
+        }
+      ]
+    },
+    {
+      "id": "working_herding_and_guard_dogs",
+      "name": "Working, herding, and guard dogs",
+      "classes": [
+        {
+          "index": 222,
+          "name": "kuvasz"
+        },
+        {
+          "index": 223,
+          "name": "schipperke"
+        },
+        {
+          "index": 224,
+          "name": "groenendael"
+        },
+        {
+          "index": 225,
+          "name": "malinois"
+        },
+        {
+          "index": 226,
+          "name": "briard"
+        },
+        {
+          "index": 227,
+          "name": "kelpie"
+        },
+        {
+          "index": 228,
+          "name": "komondor"
+        },
+        {
+          "index": 229,
+          "name": "Old English sheepdog"
+        },
+        {
+          "index": 230,
+          "name": "Shetland sheepdog"
+        },
+        {
+          "index": 231,
+          "name": "collie"
+        },
+        {
+          "index": 232,
+          "name": "Border collie"
+        },
+        {
+          "index": 233,
+          "name": "Bouvier des Flandres"
+        },
+        {
+          "index": 234,
+          "name": "Rottweiler"
+        },
+        {
+          "index": 235,
+          "name": "German shepherd"
+        },
+        {
+          "index": 236,
+          "name": "Doberman"
+        },
+        {
+          "index": 237,
+          "name": "miniature pinscher"
+        }
+      ]
+    },
+    {
+      "id": "spitz_bulldogs_poodles_and_other_dogs",
+      "name": "Spitz, bulldogs, poodles, and other dogs",
+      "classes": [
+        {
+          "index": 238,
+          "name": "Greater Swiss Mountain dog"
+        },
+        {
+          "index": 239,
+          "name": "Bernese mountain dog"
+        },
+        {
+          "index": 240,
+          "name": "Appenzeller"
+        },
+        {
+          "index": 241,
+          "name": "EntleBucher"
+        },
+        {
+          "index": 242,
+          "name": "boxer"
+        },
+        {
+          "index": 243,
+          "name": "bull mastiff"
+        },
+        {
+          "index": 244,
+          "name": "Tibetan mastiff"
+        },
+        {
+          "index": 245,
+          "name": "French bulldog"
+        },
+        {
+          "index": 246,
+          "name": "Great Dane"
+        },
+        {
+          "index": 247,
+          "name": "Saint Bernard"
+        },
+        {
+          "index": 248,
+          "name": "Eskimo dog"
+        },
+        {
+          "index": 249,
+          "name": "malamute"
+        },
+        {
+          "index": 250,
+          "name": "Siberian husky"
+        },
+        {
+          "index": 251,
+          "name": "dalmatian"
+        },
+        {
+          "index": 252,
+          "name": "affenpinscher"
+        },
+        {
+          "index": 253,
+          "name": "basenji"
+        },
+        {
+          "index": 254,
+          "name": "pug"
+        },
+        {
+          "index": 255,
+          "name": "Leonberg"
+        },
+        {
+          "index": 256,
+          "name": "Newfoundland"
+        },
+        {
+          "index": 257,
+          "name": "Great Pyrenees"
+        },
+        {
+          "index": 258,
+          "name": "Samoyed"
+        },
+        {
+          "index": 259,
+          "name": "Pomeranian"
+        },
+        {
+          "index": 260,
+          "name": "chow"
+        },
+        {
+          "index": 261,
+          "name": "keeshond"
+        },
+        {
+          "index": 262,
+          "name": "Brabancon griffon"
+        },
+        {
+          "index": 263,
+          "name": "Pembroke"
+        },
+        {
+          "index": 264,
+          "name": "Cardigan"
+        },
+        {
+          "index": 265,
+          "name": "toy poodle"
+        },
+        {
+          "index": 266,
+          "name": "miniature poodle"
+        },
+        {
+          "index": 267,
+          "name": "standard poodle"
+        },
+        {
+          "index": 268,
+          "name": "Mexican hairless"
+        }
+      ]
+    },
+    {
+      "id": "wild_canids_and_hyenas",
+      "name": "Wild canids and hyenas",
+      "classes": [
+        {
+          "index": 269,
+          "name": "timber wolf"
+        },
+        {
+          "index": 270,
+          "name": "white wolf"
+        },
+        {
+          "index": 271,
+          "name": "red wolf"
+        },
+        {
+          "index": 272,
+          "name": "coyote"
+        },
+        {
+          "index": 273,
+          "name": "dingo"
+        },
+        {
+          "index": 274,
+          "name": "dhole"
+        },
+        {
+          "index": 275,
+          "name": "African hunting dog"
+        },
+        {
+          "index": 276,
+          "name": "hyena"
+        },
+        {
+          "index": 277,
+          "name": "red fox"
+        },
+        {
+          "index": 278,
+          "name": "kit fox"
+        },
+        {
+          "index": 279,
+          "name": "Arctic fox"
+        },
+        {
+          "index": 280,
+          "name": "grey fox"
+        }
+      ]
+    },
+    {
+      "id": "domestic_cats",
+      "name": "Domestic cats",
+      "classes": [
+        {
+          "index": 281,
+          "name": "tabby"
+        },
+        {
+          "index": 282,
+          "name": "tiger cat"
+        },
+        {
+          "index": 283,
+          "name": "Persian cat"
+        },
+        {
+          "index": 284,
+          "name": "Siamese cat"
+        },
+        {
+          "index": 285,
+          "name": "Egyptian cat"
+        }
+      ]
+    },
+    {
+      "id": "big_cats",
+      "name": "Big cats",
+      "classes": [
+        {
+          "index": 286,
+          "name": "cougar"
+        },
+        {
+          "index": 287,
+          "name": "lynx"
+        },
+        {
+          "index": 288,
+          "name": "leopard"
+        },
+        {
+          "index": 289,
+          "name": "snow leopard"
+        },
+        {
+          "index": 290,
+          "name": "jaguar"
+        },
+        {
+          "index": 291,
+          "name": "lion"
+        },
+        {
+          "index": 292,
+          "name": "tiger"
+        },
+        {
+          "index": 293,
+          "name": "cheetah"
+        }
+      ]
+    },
+    {
+      "id": "bears",
+      "name": "Bears",
+      "classes": [
+        {
+          "index": 294,
+          "name": "brown bear"
+        },
+        {
+          "index": 295,
+          "name": "American black bear"
+        },
+        {
+          "index": 296,
+          "name": "ice bear"
+        },
+        {
+          "index": 297,
+          "name": "sloth bear"
+        }
+      ]
+    },
+    {
+      "id": "small_carnivores",
+      "name": "Small carnivores",
+      "classes": [
+        {
+          "index": 298,
+          "name": "mongoose"
+        },
+        {
+          "index": 299,
+          "name": "meerkat"
+        }
+      ]
+    },
+    {
+      "id": "beetles",
+      "name": "Beetles",
+      "classes": [
+        {
+          "index": 300,
+          "name": "tiger beetle"
+        },
+        {
+          "index": 301,
+          "name": "ladybug"
+        },
+        {
+          "index": 302,
+          "name": "ground beetle"
+        },
+        {
+          "index": 303,
+          "name": "long-horned beetle"
+        },
+        {
+          "index": 304,
+          "name": "leaf beetle"
+        },
+        {
+          "index": 305,
+          "name": "dung beetle"
+        },
+        {
+          "index": 306,
+          "name": "rhinoceros beetle"
+        },
+        {
+          "index": 307,
+          "name": "weevil"
+        }
+      ]
+    },
+    {
+      "id": "flies_bees_ants_and_orthopterans",
+      "name": "Flies, bees, ants, and grasshopper-like insects",
+      "classes": [
+        {
+          "index": 308,
+          "name": "fly"
+        },
+        {
+          "index": 309,
+          "name": "bee"
+        },
+        {
+          "index": 310,
+          "name": "ant"
+        },
+        {
+          "index": 311,
+          "name": "grasshopper"
+        },
+        {
+          "index": 312,
+          "name": "cricket"
+        },
+        {
+          "index": 313,
+          "name": "walking stick"
+        },
+        {
+          "index": 314,
+          "name": "cockroach"
+        },
+        {
+          "index": 315,
+          "name": "mantis"
+        },
+        {
+          "index": 316,
+          "name": "cicada"
+        },
+        {
+          "index": 317,
+          "name": "leafhopper"
+        },
+        {
+          "index": 318,
+          "name": "lacewing"
+        }
+      ]
+    },
+    {
+      "id": "dragonflies_and_butterflies",
+      "name": "Dragonflies and butterflies",
+      "classes": [
+        {
+          "index": 319,
+          "name": "dragonfly"
+        },
+        {
+          "index": 320,
+          "name": "damselfly"
+        },
+        {
+          "index": 321,
+          "name": "admiral"
+        },
+        {
+          "index": 322,
+          "name": "ringlet"
+        },
+        {
+          "index": 323,
+          "name": "monarch"
+        },
+        {
+          "index": 324,
+          "name": "cabbage butterfly"
+        },
+        {
+          "index": 325,
+          "name": "sulphur butterfly"
+        },
+        {
+          "index": 326,
+          "name": "lycaenid"
+        }
+      ]
+    },
+    {
+      "id": "echinoderms",
+      "name": "Echinoderms",
+      "classes": [
+        {
+          "index": 327,
+          "name": "starfish"
+        },
+        {
+          "index": 328,
+          "name": "sea urchin"
+        },
+        {
+          "index": 329,
+          "name": "sea cucumber"
+        }
+      ]
+    },
+    {
+      "id": "rabbits_and_rodents",
+      "name": "Rabbits and rodents",
+      "classes": [
+        {
+          "index": 330,
+          "name": "wood rabbit"
+        },
+        {
+          "index": 331,
+          "name": "hare"
+        },
+        {
+          "index": 332,
+          "name": "Angora"
+        },
+        {
+          "index": 333,
+          "name": "hamster"
+        },
+        {
+          "index": 334,
+          "name": "porcupine"
+        },
+        {
+          "index": 335,
+          "name": "fox squirrel"
+        },
+        {
+          "index": 336,
+          "name": "marmot"
+        },
+        {
+          "index": 337,
+          "name": "beaver"
+        },
+        {
+          "index": 338,
+          "name": "guinea pig"
+        }
+      ]
+    },
+    {
+      "id": "hoofed_mammals",
+      "name": "Hoofed mammals",
+      "classes": [
+        {
+          "index": 339,
+          "name": "sorrel"
+        },
+        {
+          "index": 340,
+          "name": "zebra"
+        },
+        {
+          "index": 341,
+          "name": "hog"
+        },
+        {
+          "index": 342,
+          "name": "wild boar"
+        },
+        {
+          "index": 343,
+          "name": "warthog"
+        },
+        {
+          "index": 344,
+          "name": "hippopotamus"
+        },
+        {
+          "index": 345,
+          "name": "ox"
+        },
+        {
+          "index": 346,
+          "name": "water buffalo"
+        },
+        {
+          "index": 347,
+          "name": "bison"
+        },
+        {
+          "index": 348,
+          "name": "ram"
+        },
+        {
+          "index": 349,
+          "name": "bighorn"
+        },
+        {
+          "index": 350,
+          "name": "ibex"
+        },
+        {
+          "index": 351,
+          "name": "hartebeest"
+        },
+        {
+          "index": 352,
+          "name": "impala"
+        },
+        {
+          "index": 353,
+          "name": "gazelle"
+        },
+        {
+          "index": 354,
+          "name": "Arabian camel"
+        },
+        {
+          "index": 355,
+          "name": "llama"
+        }
+      ]
+    },
+    {
+      "id": "mustelids_and_related_mammals",
+      "name": "Mustelids and related mammals",
+      "classes": [
+        {
+          "index": 356,
+          "name": "weasel"
+        },
+        {
+          "index": 357,
+          "name": "mink"
+        },
+        {
+          "index": 358,
+          "name": "polecat"
+        },
+        {
+          "index": 359,
+          "name": "black-footed ferret"
+        },
+        {
+          "index": 360,
+          "name": "otter"
+        },
+        {
+          "index": 361,
+          "name": "skunk"
+        },
+        {
+          "index": 362,
+          "name": "badger"
+        }
+      ]
+    },
+    {
+      "id": "odd_mammals",
+      "name": "Armadillos and sloths",
+      "classes": [
+        {
+          "index": 363,
+          "name": "armadillo"
+        },
+        {
+          "index": 364,
+          "name": "three-toed sloth"
+        }
+      ]
+    },
+    {
+      "id": "primates_and_lemurs",
+      "name": "Primates and lemurs",
+      "classes": [
+        {
+          "index": 365,
+          "name": "orangutan"
+        },
+        {
+          "index": 366,
+          "name": "gorilla"
+        },
+        {
+          "index": 367,
+          "name": "chimpanzee"
+        },
+        {
+          "index": 368,
+          "name": "gibbon"
+        },
+        {
+          "index": 369,
+          "name": "siamang"
+        },
+        {
+          "index": 370,
+          "name": "guenon"
+        },
+        {
+          "index": 371,
+          "name": "patas"
+        },
+        {
+          "index": 372,
+          "name": "baboon"
+        },
+        {
+          "index": 373,
+          "name": "macaque"
+        },
+        {
+          "index": 374,
+          "name": "langur"
+        },
+        {
+          "index": 375,
+          "name": "colobus"
+        },
+        {
+          "index": 376,
+          "name": "proboscis monkey"
+        },
+        {
+          "index": 377,
+          "name": "marmoset"
+        },
+        {
+          "index": 378,
+          "name": "capuchin"
+        },
+        {
+          "index": 379,
+          "name": "howler monkey"
+        },
+        {
+          "index": 380,
+          "name": "titi"
+        },
+        {
+          "index": 381,
+          "name": "spider monkey"
+        },
+        {
+          "index": 382,
+          "name": "squirrel monkey"
+        },
+        {
+          "index": 383,
+          "name": "Madagascar cat"
+        },
+        {
+          "index": 384,
+          "name": "indri"
+        }
+      ]
+    },
+    {
+      "id": "elephants_and_pandas",
+      "name": "Elephants and pandas",
+      "classes": [
+        {
+          "index": 101,
+          "name": "tusker"
+        },
+        {
+          "index": 385,
+          "name": "Indian elephant"
+        },
+        {
+          "index": 386,
+          "name": "African elephant"
+        },
+        {
+          "index": 387,
+          "name": "lesser panda"
+        },
+        {
+          "index": 388,
+          "name": "giant panda"
+        }
+      ]
+    },
+    {
+      "id": "writing_stationery_and_paper_goods",
+      "name": "Writing, stationery, and paper goods",
+      "classes": [
+        {
+          "index": 418,
+          "name": "ballpoint"
+        },
+        {
+          "index": 563,
+          "name": "fountain pen"
+        },
+        {
+          "index": 681,
+          "name": "notebook"
+        },
+        {
+          "index": 709,
+          "name": "pencil box"
+        },
+        {
+          "index": 749,
+          "name": "quill"
+        },
+        {
+          "index": 767,
+          "name": "rubber eraser"
+        }
+      ]
+    },
+    {
+      "id": "clothing_fabrics_and_wearables",
+      "name": "Clothing, fabrics, and wearables",
+      "classes": [
+        {
+          "index": 399,
+          "name": "abaya"
+        },
+        {
+          "index": 400,
+          "name": "academic gown"
+        },
+        {
+          "index": 411,
+          "name": "apron"
+        },
+        {
+          "index": 433,
+          "name": "bathing cap"
+        },
+        {
+          "index": 439,
+          "name": "bearskin"
+        },
+        {
+          "index": 443,
+          "name": "bib"
+        },
+        {
+          "index": 445,
+          "name": "bikini"
+        },
+        {
+          "index": 449,
+          "name": "boathouse"
+        },
+        {
+          "index": 451,
+          "name": "bolo tie"
+        },
+        {
+          "index": 452,
+          "name": "bonnet"
+        },
+        {
+          "index": 455,
+          "name": "bottlecap"
+        },
+        {
+          "index": 457,
+          "name": "bow tie"
+        },
+        {
+          "index": 459,
+          "name": "brassiere"
+        },
+        {
+          "index": 501,
+          "name": "cloak"
+        },
+        {
+          "index": 508,
+          "name": "computer keyboard"
+        },
+        {
+          "index": 518,
+          "name": "crash helmet"
+        },
+        {
+          "index": 529,
+          "name": "diaper"
+        },
+        {
+          "index": 552,
+          "name": "feather boa"
+        },
+        {
+          "index": 554,
+          "name": "fireboat"
+        },
+        {
+          "index": 560,
+          "name": "football helmet"
+        },
+        {
+          "index": 568,
+          "name": "fur coat"
+        },
+        {
+          "index": 578,
+          "name": "gown"
+        },
+        {
+          "index": 601,
+          "name": "hoopskirt"
+        },
+        {
+          "index": 608,
+          "name": "jean"
+        },
+        {
+          "index": 614,
+          "name": "kimono"
+        },
+        {
+          "index": 615,
+          "name": "knee pad"
+        },
+        {
+          "index": 617,
+          "name": "lab coat"
+        },
+        {
+          "index": 622,
+          "name": "lens cap"
+        },
+        {
+          "index": 625,
+          "name": "lifeboat"
+        },
+        {
+          "index": 638,
+          "name": "maillot"
+        },
+        {
+          "index": 639,
+          "name": "maillot tank suit"
+        },
+        {
+          "index": 655,
+          "name": "miniskirt"
+        },
+        {
+          "index": 658,
+          "name": "mitten"
+        },
+        {
+          "index": 667,
+          "name": "mortarboard"
+        },
+        {
+          "index": 689,
+          "name": "overskirt"
+        },
+        {
+          "index": 697,
+          "name": "pajama"
+        },
+        {
+          "index": 735,
+          "name": "poncho"
+        },
+        {
+          "index": 775,
+          "name": "sarong"
+        },
+        {
+          "index": 781,
+          "name": "scoreboard"
+        },
+        {
+          "index": 793,
+          "name": "shower cap"
+        },
+        {
+          "index": 796,
+          "name": "ski mask"
+        },
+        {
+          "index": 806,
+          "name": "sock"
+        },
+        {
+          "index": 808,
+          "name": "sombrero"
+        },
+        {
+          "index": 814,
+          "name": "speedboat"
+        },
+        {
+          "index": 824,
+          "name": "stole"
+        },
+        {
+          "index": 834,
+          "name": "suit"
+        },
+        {
+          "index": 841,
+          "name": "sweatshirt"
+        },
+        {
+          "index": 842,
+          "name": "swimming trunks"
+        },
+        {
+          "index": 869,
+          "name": "trench coat"
+        },
+        {
+          "index": 878,
+          "name": "typewriter keyboard"
+        },
+        {
+          "index": 879,
+          "name": "umbrella"
+        },
+        {
+          "index": 885,
+          "name": "velvet"
+        },
+        {
+          "index": 887,
+          "name": "vestment"
+        },
+        {
+          "index": 903,
+          "name": "wig"
+        },
+        {
+          "index": 906,
+          "name": "Windsor tie"
+        },
+        {
+          "index": 911,
+          "name": "wool"
+        }
+      ]
+    },
+    {
+      "id": "footwear",
+      "name": "Footwear",
+      "classes": [
+        {
+          "index": 502,
+          "name": "clog"
+        },
+        {
+          "index": 514,
+          "name": "cowboy boot"
+        },
+        {
+          "index": 630,
+          "name": "Loafer"
+        },
+        {
+          "index": 770,
+          "name": "running shoe"
+        },
+        {
+          "index": 774,
+          "name": "sandal"
+        },
+        {
+          "index": 788,
+          "name": "shoe shop"
+        }
+      ]
+    },
+    {
+      "id": "bags_cases_and_personal_containers",
+      "name": "Bags, cases, and personal containers",
+      "classes": [
+        {
+          "index": 414,
+          "name": "backpack"
+        },
+        {
+          "index": 597,
+          "name": "holster"
+        },
+        {
+          "index": 636,
+          "name": "mailbag"
+        },
+        {
+          "index": 748,
+          "name": "purse"
+        },
+        {
+          "index": 893,
+          "name": "wallet"
+        }
+      ]
+    },
+    {
+      "id": "musical_instruments",
+      "name": "Musical instruments",
+      "classes": [
+        {
+          "index": 401,
+          "name": "accordion"
+        },
+        {
+          "index": 402,
+          "name": "acoustic guitar"
+        },
+        {
+          "index": 420,
+          "name": "banjo"
+        },
+        {
+          "index": 432,
+          "name": "bassoon"
+        },
+        {
+          "index": 486,
+          "name": "cello"
+        },
+        {
+          "index": 513,
+          "name": "cornet"
+        },
+        {
+          "index": 541,
+          "name": "drum"
+        },
+        {
+          "index": 542,
+          "name": "drumstick"
+        },
+        {
+          "index": 546,
+          "name": "electric guitar"
+        },
+        {
+          "index": 558,
+          "name": "flute"
+        },
+        {
+          "index": 566,
+          "name": "French horn"
+        },
+        {
+          "index": 577,
+          "name": "gong"
+        },
+        {
+          "index": 579,
+          "name": "grand piano"
+        },
+        {
+          "index": 593,
+          "name": "harmonica"
+        },
+        {
+          "index": 594,
+          "name": "harp"
+        },
+        {
+          "index": 641,
+          "name": "maraca"
+        },
+        {
+          "index": 642,
+          "name": "marimba"
+        },
+        {
+          "index": 650,
+          "name": "microphone"
+        },
+        {
+          "index": 683,
+          "name": "oboe"
+        },
+        {
+          "index": 684,
+          "name": "ocarina"
+        },
+        {
+          "index": 687,
+          "name": "organ"
+        },
+        {
+          "index": 699,
+          "name": "panpipe"
+        },
+        {
+          "index": 710,
+          "name": "pencil sharpener"
+        },
+        {
+          "index": 776,
+          "name": "sax"
+        },
+        {
+          "index": 822,
+          "name": "steel drum"
+        },
+        {
+          "index": 875,
+          "name": "trombone"
+        },
+        {
+          "index": 881,
+          "name": "upright"
+        },
+        {
+          "index": 889,
+          "name": "violin"
+        }
+      ]
+    },
+    {
+      "id": "aircraft_spacecraft_and_military_vehicles",
+      "name": "Aircraft, spacecraft, and military vehicles",
+      "classes": [
+        {
+          "index": 403,
+          "name": "aircraft carrier"
+        },
+        {
+          "index": 404,
+          "name": "airliner"
+        },
+        {
+          "index": 405,
+          "name": "airship"
+        },
+        {
+          "index": 586,
+          "name": "half track"
+        },
+        {
+          "index": 657,
+          "name": "missile"
+        },
+        {
+          "index": 744,
+          "name": "projectile"
+        },
+        {
+          "index": 812,
+          "name": "space shuttle"
+        },
+        {
+          "index": 847,
+          "name": "tank"
+        },
+        {
+          "index": 895,
+          "name": "warplane"
+        }
+      ]
+    },
+    {
+      "id": "watercraft",
+      "name": "Watercraft",
+      "classes": [
+        {
+          "index": 484,
+          "name": "catamaran"
+        },
+        {
+          "index": 510,
+          "name": "container ship"
+        },
+        {
+          "index": 576,
+          "name": "gondola"
+        },
+        {
+          "index": 628,
+          "name": "liner"
+        },
+        {
+          "index": 780,
+          "name": "schooner"
+        },
+        {
+          "index": 833,
+          "name": "submarine"
+        },
+        {
+          "index": 871,
+          "name": "trimaran"
+        },
+        {
+          "index": 913,
+          "name": "wreck"
+        },
+        {
+          "index": 914,
+          "name": "yawl"
+        }
+      ]
+    },
+    {
+      "id": "road_and_offroad_vehicles",
+      "name": "Road and off-road vehicles",
+      "classes": [
+        {
+          "index": 407,
+          "name": "ambulance"
+        },
+        {
+          "index": 408,
+          "name": "amphibian"
+        },
+        {
+          "index": 436,
+          "name": "beach wagon"
+        },
+        {
+          "index": 468,
+          "name": "cab"
+        },
+        {
+          "index": 511,
+          "name": "convertible"
+        },
+        {
+          "index": 555,
+          "name": "fire engine"
+        },
+        {
+          "index": 569,
+          "name": "garbage truck"
+        },
+        {
+          "index": 609,
+          "name": "jeep"
+        },
+        {
+          "index": 627,
+          "name": "limousine"
+        },
+        {
+          "index": 654,
+          "name": "minibus"
+        },
+        {
+          "index": 656,
+          "name": "minivan"
+        },
+        {
+          "index": 661,
+          "name": "Model T"
+        },
+        {
+          "index": 675,
+          "name": "moving van"
+        },
+        {
+          "index": 717,
+          "name": "pickup"
+        },
+        {
+          "index": 734,
+          "name": "police van"
+        },
+        {
+          "index": 751,
+          "name": "racer"
+        },
+        {
+          "index": 757,
+          "name": "recreational vehicle"
+        },
+        {
+          "index": 777,
+          "name": "scabbard"
+        },
+        {
+          "index": 779,
+          "name": "school bus"
+        },
+        {
+          "index": 802,
+          "name": "snowmobile"
+        },
+        {
+          "index": 803,
+          "name": "snowplow"
+        },
+        {
+          "index": 817,
+          "name": "sports car"
+        },
+        {
+          "index": 864,
+          "name": "tow truck"
+        },
+        {
+          "index": 866,
+          "name": "tractor"
+        },
+        {
+          "index": 867,
+          "name": "trailer truck"
+        }
+      ]
+    },
+    {
+      "id": "rail_vehicles",
+      "name": "Rail vehicles",
+      "classes": [
+        {
+          "index": 466,
+          "name": "bullet train"
+        },
+        {
+          "index": 547,
+          "name": "electric locomotive"
+        },
+        {
+          "index": 565,
+          "name": "freight car"
+        },
+        {
+          "index": 705,
+          "name": "passenger car"
+        },
+        {
+          "index": 820,
+          "name": "steam locomotive"
+        },
+        {
+          "index": 829,
+          "name": "streetcar"
+        },
+        {
+          "index": 874,
+          "name": "trolleybus"
+        }
+      ]
+    },
+    {
+      "id": "bicycles_motorcycles_and_small_rides",
+      "name": "Bicycles, motorcycles, and small rides",
+      "classes": [
+        {
+          "index": 444,
+          "name": "bicycle-built-for-two"
+        },
+        {
+          "index": 573,
+          "name": "go-kart"
+        },
+        {
+          "index": 665,
+          "name": "moped"
+        },
+        {
+          "index": 670,
+          "name": "motor scooter"
+        },
+        {
+          "index": 671,
+          "name": "mountain bike"
+        },
+        {
+          "index": 870,
+          "name": "tricycle"
+        },
+        {
+          "index": 880,
+          "name": "unicycle"
+        }
+      ]
+    },
+    {
+      "id": "buildings_shops_and_large_structures",
+      "name": "Buildings, shops, and large structures",
+      "classes": [
+        {
+          "index": 406,
+          "name": "altar"
+        },
+        {
+          "index": 410,
+          "name": "apiary"
+        },
+        {
+          "index": 415,
+          "name": "bakery"
+        },
+        {
+          "index": 424,
+          "name": "barbershop"
+        },
+        {
+          "index": 425,
+          "name": "barn"
+        },
+        {
+          "index": 454,
+          "name": "bookshop"
+        },
+        {
+          "index": 467,
+          "name": "butcher shop"
+        },
+        {
+          "index": 483,
+          "name": "castle"
+        },
+        {
+          "index": 497,
+          "name": "church"
+        },
+        {
+          "index": 500,
+          "name": "cliff dwelling"
+        },
+        {
+          "index": 538,
+          "name": "dome"
+        },
+        {
+          "index": 580,
+          "name": "greenhouse"
+        },
+        {
+          "index": 582,
+          "name": "grocery store"
+        },
+        {
+          "index": 598,
+          "name": "home theater"
+        },
+        {
+          "index": 624,
+          "name": "library"
+        },
+        {
+          "index": 634,
+          "name": "lumbermill"
+        },
+        {
+          "index": 663,
+          "name": "monastery"
+        },
+        {
+          "index": 668,
+          "name": "mosque"
+        },
+        {
+          "index": 685,
+          "name": "odometer"
+        },
+        {
+          "index": 698,
+          "name": "palace"
+        },
+        {
+          "index": 727,
+          "name": "planetarium"
+        },
+        {
+          "index": 743,
+          "name": "prison"
+        },
+        {
+          "index": 762,
+          "name": "restaurant"
+        },
+        {
+          "index": 819,
+          "name": "stage"
+        },
+        {
+          "index": 832,
+          "name": "stupa"
+        },
+        {
+          "index": 860,
+          "name": "tobacco shop"
+        },
+        {
+          "index": 865,
+          "name": "toyshop"
+        },
+        {
+          "index": 884,
+          "name": "vault"
+        },
+        {
+          "index": 915,
+          "name": "yurt"
+        }
+      ]
+    },
+    {
+      "id": "bridges_walls_and_barriers",
+      "name": "Bridges, walls, and barriers",
+      "classes": [
+        {
+          "index": 421,
+          "name": "bannister"
+        },
+        {
+          "index": 460,
+          "name": "breakwater"
+        },
+        {
+          "index": 489,
+          "name": "chainlink fence"
+        },
+        {
+          "index": 525,
+          "name": "dam"
+        },
+        {
+          "index": 536,
+          "name": "dock"
+        },
+        {
+          "index": 716,
+          "name": "picket fence"
+        },
+        {
+          "index": 718,
+          "name": "pier"
+        },
+        {
+          "index": 821,
+          "name": "steel arch bridge"
+        },
+        {
+          "index": 825,
+          "name": "stone wall"
+        },
+        {
+          "index": 839,
+          "name": "suspension bridge"
+        },
+        {
+          "index": 888,
+          "name": "viaduct"
+        },
+        {
+          "index": 912,
+          "name": "worm fence"
+        }
+      ]
+    },
+    {
+      "id": "furniture_and_home_furnishings",
+      "name": "Furniture and home furnishings",
+      "classes": [
+        {
+          "index": 423,
+          "name": "barber chair"
+        },
+        {
+          "index": 431,
+          "name": "bassinet"
+        },
+        {
+          "index": 453,
+          "name": "bookcase"
+        },
+        {
+          "index": 492,
+          "name": "chest"
+        },
+        {
+          "index": 493,
+          "name": "chiffonier"
+        },
+        {
+          "index": 495,
+          "name": "china cabinet"
+        },
+        {
+          "index": 498,
+          "name": "cinema"
+        },
+        {
+          "index": 516,
+          "name": "cradle"
+        },
+        {
+          "index": 520,
+          "name": "crib"
+        },
+        {
+          "index": 526,
+          "name": "desk"
+        },
+        {
+          "index": 527,
+          "name": "desktop computer"
+        },
+        {
+          "index": 532,
+          "name": "dining table"
+        },
+        {
+          "index": 548,
+          "name": "entertainment center"
+        },
+        {
+          "index": 559,
+          "name": "folding chair"
+        },
+        {
+          "index": 564,
+          "name": "four-poster"
+        },
+        {
+          "index": 619,
+          "name": "lampshade"
+        },
+        {
+          "index": 648,
+          "name": "medicine chest"
+        },
+        {
+          "index": 703,
+          "name": "park bench"
+        },
+        {
+          "index": 721,
+          "name": "pillow"
+        },
+        {
+          "index": 729,
+          "name": "plate rack"
+        },
+        {
+          "index": 765,
+          "name": "rocking chair"
+        },
+        {
+          "index": 831,
+          "name": "studio couch"
+        },
+        {
+          "index": 857,
+          "name": "throne"
+        },
+        {
+          "index": 894,
+          "name": "wardrobe"
+        },
+        {
+          "index": 905,
+          "name": "window shade"
+        }
+      ]
+    },
+    {
+      "id": "kitchenware_cookware_and_tableware",
+      "name": "Kitchenware, cookware, and tableware",
+      "classes": [
+        {
+          "index": 441,
+          "name": "beer glass"
+        },
+        {
+          "index": 469,
+          "name": "caldron"
+        },
+        {
+          "index": 473,
+          "name": "can opener"
+        },
+        {
+          "index": 499,
+          "name": "cleaver"
+        },
+        {
+          "index": 503,
+          "name": "cocktail shaker"
+        },
+        {
+          "index": 504,
+          "name": "coffee mug"
+        },
+        {
+          "index": 505,
+          "name": "coffeepot"
+        },
+        {
+          "index": 512,
+          "name": "corkscrew"
+        },
+        {
+          "index": 521,
+          "name": "Crock Pot"
+        },
+        {
+          "index": 544,
+          "name": "Dutch oven"
+        },
+        {
+          "index": 567,
+          "name": "frying pan"
+        },
+        {
+          "index": 572,
+          "name": "goblet"
+        },
+        {
+          "index": 618,
+          "name": "ladle"
+        },
+        {
+          "index": 647,
+          "name": "measuring cup"
+        },
+        {
+          "index": 659,
+          "name": "mixing bowl"
+        },
+        {
+          "index": 725,
+          "name": "pitcher"
+        },
+        {
+          "index": 738,
+          "name": "pot"
+        },
+        {
+          "index": 739,
+          "name": "potter's wheel"
+        },
+        {
+          "index": 773,
+          "name": "saltshaker"
+        },
+        {
+          "index": 809,
+          "name": "soup bowl"
+        },
+        {
+          "index": 813,
+          "name": "spatula"
+        },
+        {
+          "index": 818,
+          "name": "spotlight"
+        },
+        {
+          "index": 828,
+          "name": "strainer"
+        },
+        {
+          "index": 849,
+          "name": "teapot"
+        },
+        {
+          "index": 868,
+          "name": "tray"
+        },
+        {
+          "index": 909,
+          "name": "wok"
+        },
+        {
+          "index": 910,
+          "name": "wooden spoon"
+        }
+      ]
+    },
+    {
+      "id": "home_appliances",
+      "name": "Home appliances",
+      "classes": [
+        {
+          "index": 534,
+          "name": "dishwasher"
+        },
+        {
+          "index": 545,
+          "name": "electric fan"
+        },
+        {
+          "index": 550,
+          "name": "espresso maker"
+        },
+        {
+          "index": 589,
+          "name": "hand blower"
+        },
+        {
+          "index": 606,
+          "name": "iron"
+        },
+        {
+          "index": 651,
+          "name": "microwave"
+        },
+        {
+          "index": 760,
+          "name": "refrigerator"
+        },
+        {
+          "index": 766,
+          "name": "rotisserie"
+        },
+        {
+          "index": 811,
+          "name": "space heater"
+        },
+        {
+          "index": 827,
+          "name": "stove"
+        },
+        {
+          "index": 859,
+          "name": "toaster"
+        },
+        {
+          "index": 882,
+          "name": "vacuum"
+        },
+        {
+          "index": 891,
+          "name": "waffle iron"
+        },
+        {
+          "index": 897,
+          "name": "washer"
+        }
+      ]
+    },
+    {
+      "id": "electronics_audio_and_office_devices",
+      "name": "Electronics, audio, and office devices",
+      "classes": [
+        {
+          "index": 481,
+          "name": "cassette"
+        },
+        {
+          "index": 482,
+          "name": "cassette player"
+        },
+        {
+          "index": 485,
+          "name": "CD player"
+        },
+        {
+          "index": 487,
+          "name": "cellular telephone"
+        },
+        {
+          "index": 528,
+          "name": "dial telephone"
+        },
+        {
+          "index": 530,
+          "name": "digital clock"
+        },
+        {
+          "index": 531,
+          "name": "digital watch"
+        },
+        {
+          "index": 556,
+          "name": "fire screen"
+        },
+        {
+          "index": 590,
+          "name": "hand-held computer"
+        },
+        {
+          "index": 592,
+          "name": "hard disc"
+        },
+        {
+          "index": 605,
+          "name": "iPod"
+        },
+        {
+          "index": 613,
+          "name": "joystick"
+        },
+        {
+          "index": 620,
+          "name": "laptop"
+        },
+        {
+          "index": 662,
+          "name": "modem"
+        },
+        {
+          "index": 664,
+          "name": "monitor"
+        },
+        {
+          "index": 688,
+          "name": "oscilloscope"
+        },
+        {
+          "index": 713,
+          "name": "photocopier"
+        },
+        {
+          "index": 742,
+          "name": "printer"
+        },
+        {
+          "index": 745,
+          "name": "projector"
+        },
+        {
+          "index": 754,
+          "name": "radio"
+        },
+        {
+          "index": 755,
+          "name": "radio telescope"
+        },
+        {
+          "index": 761,
+          "name": "remote control"
+        },
+        {
+          "index": 782,
+          "name": "screen"
+        },
+        {
+          "index": 800,
+          "name": "slot"
+        },
+        {
+          "index": 810,
+          "name": "space bar"
+        },
+        {
+          "index": 838,
+          "name": "sunscreen"
+        },
+        {
+          "index": 848,
+          "name": "tape player"
+        },
+        {
+          "index": 851,
+          "name": "television"
+        },
+        {
+          "index": 872,
+          "name": "tripod"
+        },
+        {
+          "index": 886,
+          "name": "vending machine"
+        },
+        {
+          "index": 904,
+          "name": "window screen"
+        }
+      ]
+    },
+    {
+      "id": "cameras_and_optics",
+      "name": "Cameras and optics",
+      "classes": [
+        {
+          "index": 447,
+          "name": "binoculars"
+        },
+        {
+          "index": 633,
+          "name": "loupe"
+        },
+        {
+          "index": 732,
+          "name": "Polaroid camera"
+        },
+        {
+          "index": 759,
+          "name": "reflex camera"
+        },
+        {
+          "index": 836,
+          "name": "sunglass"
+        },
+        {
+          "index": 837,
+          "name": "sunglasses"
+        }
+      ]
+    },
+    {
+      "id": "tools_hardware_and_fasteners",
+      "name": "Tools, hardware, and fasteners",
+      "classes": [
+        {
+          "index": 428,
+          "name": "barrow"
+        },
+        {
+          "index": 462,
+          "name": "broom"
+        },
+        {
+          "index": 488,
+          "name": "chain"
+        },
+        {
+          "index": 506,
+          "name": "coil"
+        },
+        {
+          "index": 507,
+          "name": "combination lock"
+        },
+        {
+          "index": 553,
+          "name": "file"
+        },
+        {
+          "index": 587,
+          "name": "hammer"
+        },
+        {
+          "index": 596,
+          "name": "hatchet"
+        },
+        {
+          "index": 600,
+          "name": "hook"
+        },
+        {
+          "index": 616,
+          "name": "knot"
+        },
+        {
+          "index": 621,
+          "name": "lawn mower"
+        },
+        {
+          "index": 623,
+          "name": "letter opener"
+        },
+        {
+          "index": 674,
+          "name": "mousetrap"
+        },
+        {
+          "index": 677,
+          "name": "nail"
+        },
+        {
+          "index": 695,
+          "name": "padlock"
+        },
+        {
+          "index": 696,
+          "name": "paintbrush"
+        },
+        {
+          "index": 714,
+          "name": "pick"
+        },
+        {
+          "index": 715,
+          "name": "pickelhaube"
+        },
+        {
+          "index": 730,
+          "name": "plow"
+        },
+        {
+          "index": 731,
+          "name": "plunger"
+        },
+        {
+          "index": 740,
+          "name": "power drill"
+        },
+        {
+          "index": 769,
+          "name": "rule"
+        },
+        {
+          "index": 783,
+          "name": "screw"
+        },
+        {
+          "index": 784,
+          "name": "screwdriver"
+        },
+        {
+          "index": 792,
+          "name": "shovel"
+        },
+        {
+          "index": 798,
+          "name": "slide rule"
+        },
+        {
+          "index": 816,
+          "name": "spindle"
+        },
+        {
+          "index": 844,
+          "name": "switch"
+        },
+        {
+          "index": 855,
+          "name": "thimble"
+        },
+        {
+          "index": 856,
+          "name": "thresher"
+        }
+      ]
+    },
+    {
+      "id": "weapons_armor_and_protective_gear",
+      "name": "Weapons, armor, and protective gear",
+      "classes": [
+        {
+          "index": 413,
+          "name": "assault rifle"
+        },
+        {
+          "index": 456,
+          "name": "bow"
+        },
+        {
+          "index": 461,
+          "name": "breastplate"
+        },
+        {
+          "index": 465,
+          "name": "bulletproof vest"
+        },
+        {
+          "index": 471,
+          "name": "cannon"
+        },
+        {
+          "index": 490,
+          "name": "chain mail"
+        },
+        {
+          "index": 491,
+          "name": "chain saw"
+        },
+        {
+          "index": 524,
+          "name": "cuirass"
+        },
+        {
+          "index": 583,
+          "name": "guillotine"
+        },
+        {
+          "index": 763,
+          "name": "revolver"
+        },
+        {
+          "index": 764,
+          "name": "rifle"
+        },
+        {
+          "index": 787,
+          "name": "shield"
+        }
+      ]
+    },
+    {
+      "id": "sports_games_and_exercise_equipment",
+      "name": "Sports, games, and exercise equipment",
+      "classes": [
+        {
+          "index": 416,
+          "name": "balance beam"
+        },
+        {
+          "index": 422,
+          "name": "barbell"
+        },
+        {
+          "index": 429,
+          "name": "baseball"
+        },
+        {
+          "index": 430,
+          "name": "basketball"
+        },
+        {
+          "index": 450,
+          "name": "bobsled"
+        },
+        {
+          "index": 522,
+          "name": "croquet ball"
+        },
+        {
+          "index": 537,
+          "name": "dogsled"
+        },
+        {
+          "index": 543,
+          "name": "dumbbell"
+        },
+        {
+          "index": 574,
+          "name": "golf ball"
+        },
+        {
+          "index": 575,
+          "name": "golfcart"
+        },
+        {
+          "index": 602,
+          "name": "horizontal bar"
+        },
+        {
+          "index": 611,
+          "name": "jigsaw puzzle"
+        },
+        {
+          "index": 702,
+          "name": "parallel bars"
+        },
+        {
+          "index": 722,
+          "name": "ping-pong ball"
+        },
+        {
+          "index": 736,
+          "name": "pool table"
+        },
+        {
+          "index": 746,
+          "name": "puck"
+        },
+        {
+          "index": 747,
+          "name": "punching bag"
+        },
+        {
+          "index": 752,
+          "name": "racket"
+        },
+        {
+          "index": 768,
+          "name": "rugby ball"
+        },
+        {
+          "index": 795,
+          "name": "ski"
+        },
+        {
+          "index": 805,
+          "name": "soccer ball"
+        },
+        {
+          "index": 843,
+          "name": "swing"
+        },
+        {
+          "index": 852,
+          "name": "tennis ball"
+        },
+        {
+          "index": 890,
+          "name": "volleyball"
+        }
+      ]
+    },
+    {
+      "id": "medical_lab_and_safety_equipment",
+      "name": "Medical, lab, and safety equipment",
+      "classes": [
+        {
+          "index": 419,
+          "name": "Band Aid"
+        },
+        {
+          "index": 438,
+          "name": "beaker"
+        },
+        {
+          "index": 570,
+          "name": "gasmask"
+        },
+        {
+          "index": 678,
+          "name": "neck brace"
+        },
+        {
+          "index": 691,
+          "name": "oxygen mask"
+        },
+        {
+          "index": 712,
+          "name": "Petri dish"
+        },
+        {
+          "index": 823,
+          "name": "stethoscope"
+        },
+        {
+          "index": 830,
+          "name": "stretcher"
+        },
+        {
+          "index": 845,
+          "name": "syringe"
+        }
+      ]
+    },
+    {
+      "id": "public_fixtures_and_signage",
+      "name": "Public fixtures and signage",
+      "classes": [
+        {
+          "index": 437,
+          "name": "beacon"
+        },
+        {
+          "index": 442,
+          "name": "bell cote"
+        },
+        {
+          "index": 480,
+          "name": "cash machine"
+        },
+        {
+          "index": 557,
+          "name": "flagpole"
+        },
+        {
+          "index": 562,
+          "name": "fountain"
+        },
+        {
+          "index": 637,
+          "name": "mailbox"
+        },
+        {
+          "index": 640,
+          "name": "manhole cover"
+        },
+        {
+          "index": 645,
+          "name": "maypole"
+        },
+        {
+          "index": 704,
+          "name": "parking meter"
+        },
+        {
+          "index": 707,
+          "name": "pay-phone"
+        },
+        {
+          "index": 708,
+          "name": "pedestal"
+        },
+        {
+          "index": 733,
+          "name": "pole"
+        },
+        {
+          "index": 835,
+          "name": "sundial"
+        },
+        {
+          "index": 863,
+          "name": "totem pole"
+        },
+        {
+          "index": 877,
+          "name": "turnstile"
+        },
+        {
+          "index": 900,
+          "name": "water tower"
+        },
+        {
+          "index": 919,
+          "name": "street sign"
+        },
+        {
+          "index": 920,
+          "name": "traffic light"
+        }
+      ]
+    },
+    {
+      "id": "lighting_heat_and_fire_objects",
+      "name": "Lighting, heat, and fire objects",
+      "classes": [
+        {
+          "index": 470,
+          "name": "candle"
+        },
+        {
+          "index": 607,
+          "name": "jack-o'-lantern"
+        },
+        {
+          "index": 626,
+          "name": "lighter"
+        },
+        {
+          "index": 644,
+          "name": "matchstick"
+        },
+        {
+          "index": 807,
+          "name": "solar dish"
+        },
+        {
+          "index": 862,
+          "name": "torch"
+        }
+      ]
+    },
+    {
+      "id": "bath_cleaning_and_household_items",
+      "name": "Bath, cleaning, and household items",
+      "classes": [
+        {
+          "index": 434,
+          "name": "bath towel"
+        },
+        {
+          "index": 435,
+          "name": "bathtub"
+        },
+        {
+          "index": 463,
+          "name": "bucket"
+        },
+        {
+          "index": 533,
+          "name": "dishrag"
+        },
+        {
+          "index": 539,
+          "name": "doormat"
+        },
+        {
+          "index": 700,
+          "name": "paper towel"
+        },
+        {
+          "index": 794,
+          "name": "shower curtain"
+        },
+        {
+          "index": 840,
+          "name": "swab"
+        },
+        {
+          "index": 861,
+          "name": "toilet seat"
+        },
+        {
+          "index": 896,
+          "name": "washbasin"
+        },
+        {
+          "index": 999,
+          "name": "toilet tissue"
+        }
+      ]
+    },
+    {
+      "id": "personal_care_and_cosmetics",
+      "name": "Personal care and cosmetics",
+      "classes": [
+        {
+          "index": 551,
+          "name": "face powder"
+        },
+        {
+          "index": 584,
+          "name": "hair slide"
+        },
+        {
+          "index": 585,
+          "name": "hair spray"
+        },
+        {
+          "index": 629,
+          "name": "lipstick"
+        },
+        {
+          "index": 631,
+          "name": "lotion"
+        },
+        {
+          "index": 643,
+          "name": "mask"
+        },
+        {
+          "index": 679,
+          "name": "necklace"
+        },
+        {
+          "index": 711,
+          "name": "perfume"
+        }
+      ]
+    },
+    {
+      "id": "containers_bottles_and_packaging",
+      "name": "Containers, bottles, and packaging",
+      "classes": [
+        {
+          "index": 412,
+          "name": "ashcan"
+        },
+        {
+          "index": 427,
+          "name": "barrel"
+        },
+        {
+          "index": 440,
+          "name": "beer bottle"
+        },
+        {
+          "index": 446,
+          "name": "binder"
+        },
+        {
+          "index": 478,
+          "name": "carton"
+        },
+        {
+          "index": 519,
+          "name": "crate"
+        },
+        {
+          "index": 549,
+          "name": "envelope"
+        },
+        {
+          "index": 588,
+          "name": "hamper"
+        },
+        {
+          "index": 653,
+          "name": "milk can"
+        },
+        {
+          "index": 692,
+          "name": "packet"
+        },
+        {
+          "index": 719,
+          "name": "piggy bank"
+        },
+        {
+          "index": 720,
+          "name": "pill bottle"
+        },
+        {
+          "index": 728,
+          "name": "plastic bag"
+        },
+        {
+          "index": 737,
+          "name": "pop bottle"
+        },
+        {
+          "index": 756,
+          "name": "rain barrel"
+        },
+        {
+          "index": 771,
+          "name": "safe"
+        },
+        {
+          "index": 772,
+          "name": "safety pin"
+        },
+        {
+          "index": 790,
+          "name": "shopping basket"
+        },
+        {
+          "index": 791,
+          "name": "shopping cart"
+        },
+        {
+          "index": 804,
+          "name": "soap dispenser"
+        },
+        {
+          "index": 876,
+          "name": "tub"
+        },
+        {
+          "index": 883,
+          "name": "vase"
+        },
+        {
+          "index": 898,
+          "name": "water bottle"
+        },
+        {
+          "index": 899,
+          "name": "water jug"
+        },
+        {
+          "index": 901,
+          "name": "whiskey jug"
+        },
+        {
+          "index": 907,
+          "name": "wine bottle"
+        }
+      ]
+    },
+    {
+      "id": "prepared_foods_and_drinks",
+      "name": "Prepared foods and drinks",
+      "classes": [
+        {
+          "index": 923,
+          "name": "plate"
+        },
+        {
+          "index": 924,
+          "name": "guacamole"
+        },
+        {
+          "index": 925,
+          "name": "consomme"
+        },
+        {
+          "index": 926,
+          "name": "hot pot"
+        },
+        {
+          "index": 927,
+          "name": "trifle"
+        },
+        {
+          "index": 928,
+          "name": "ice cream"
+        },
+        {
+          "index": 929,
+          "name": "ice lolly"
+        },
+        {
+          "index": 930,
+          "name": "French loaf"
+        },
+        {
+          "index": 931,
+          "name": "bagel"
+        },
+        {
+          "index": 932,
+          "name": "pretzel"
+        },
+        {
+          "index": 933,
+          "name": "cheeseburger"
+        },
+        {
+          "index": 934,
+          "name": "hotdog"
+        },
+        {
+          "index": 935,
+          "name": "mashed potato"
+        },
+        {
+          "index": 959,
+          "name": "carbonara"
+        },
+        {
+          "index": 960,
+          "name": "chocolate sauce"
+        },
+        {
+          "index": 961,
+          "name": "dough"
+        },
+        {
+          "index": 962,
+          "name": "meat loaf"
+        },
+        {
+          "index": 963,
+          "name": "pizza"
+        },
+        {
+          "index": 964,
+          "name": "potpie"
+        },
+        {
+          "index": 965,
+          "name": "burrito"
+        },
+        {
+          "index": 966,
+          "name": "red wine"
+        },
+        {
+          "index": 967,
+          "name": "espresso"
+        },
+        {
+          "index": 968,
+          "name": "cup"
+        },
+        {
+          "index": 969,
+          "name": "eggnog"
+        }
+      ]
+    },
+    {
+      "id": "fruits_vegetables_and_edible_plants",
+      "name": "Fruits, vegetables, and edible plants",
+      "classes": [
+        {
+          "index": 936,
+          "name": "head cabbage"
+        },
+        {
+          "index": 937,
+          "name": "broccoli"
+        },
+        {
+          "index": 938,
+          "name": "cauliflower"
+        },
+        {
+          "index": 939,
+          "name": "zucchini"
+        },
+        {
+          "index": 940,
+          "name": "spaghetti squash"
+        },
+        {
+          "index": 941,
+          "name": "acorn squash"
+        },
+        {
+          "index": 942,
+          "name": "butternut squash"
+        },
+        {
+          "index": 943,
+          "name": "cucumber"
+        },
+        {
+          "index": 944,
+          "name": "artichoke"
+        },
+        {
+          "index": 945,
+          "name": "bell pepper"
+        },
+        {
+          "index": 946,
+          "name": "cardoon"
+        },
+        {
+          "index": 948,
+          "name": "Granny Smith"
+        },
+        {
+          "index": 949,
+          "name": "strawberry"
+        },
+        {
+          "index": 950,
+          "name": "orange"
+        },
+        {
+          "index": 951,
+          "name": "lemon"
+        },
+        {
+          "index": 952,
+          "name": "fig"
+        },
+        {
+          "index": 953,
+          "name": "pineapple"
+        },
+        {
+          "index": 954,
+          "name": "banana"
+        },
+        {
+          "index": 955,
+          "name": "jackfruit"
+        },
+        {
+          "index": 956,
+          "name": "custard apple"
+        },
+        {
+          "index": 957,
+          "name": "pomegranate"
+        },
+        {
+          "index": 987,
+          "name": "corn"
+        },
+        {
+          "index": 988,
+          "name": "acorn"
+        },
+        {
+          "index": 989,
+          "name": "hip"
+        },
+        {
+          "index": 990,
+          "name": "buckeye"
+        }
+      ]
+    },
+    {
+      "id": "fungi",
+      "name": "Fungi",
+      "classes": [
+        {
+          "index": 947,
+          "name": "mushroom"
+        },
+        {
+          "index": 991,
+          "name": "coral fungus"
+        },
+        {
+          "index": 992,
+          "name": "agaric"
+        },
+        {
+          "index": 993,
+          "name": "gyromitra"
+        },
+        {
+          "index": 994,
+          "name": "stinkhorn"
+        },
+        {
+          "index": 995,
+          "name": "earthstar"
+        },
+        {
+          "index": 996,
+          "name": "hen-of-the-woods"
+        },
+        {
+          "index": 997,
+          "name": "bolete"
+        },
+        {
+          "index": 998,
+          "name": "ear"
+        }
+      ]
+    },
+    {
+      "id": "landscapes_and_geology",
+      "name": "Landscapes and geology",
+      "classes": [
+        {
+          "index": 970,
+          "name": "alp"
+        },
+        {
+          "index": 971,
+          "name": "bubble"
+        },
+        {
+          "index": 972,
+          "name": "cliff"
+        },
+        {
+          "index": 973,
+          "name": "coral reef"
+        },
+        {
+          "index": 974,
+          "name": "geyser"
+        },
+        {
+          "index": 975,
+          "name": "lakeside"
+        },
+        {
+          "index": 976,
+          "name": "promontory"
+        },
+        {
+          "index": 977,
+          "name": "sandbar"
+        },
+        {
+          "index": 978,
+          "name": "seashore"
+        },
+        {
+          "index": 979,
+          "name": "valley"
+        },
+        {
+          "index": 980,
+          "name": "volcano"
+        }
+      ]
+    },
+    {
+      "id": "people_and_roles",
+      "name": "People and roles",
+      "classes": [
+        {
+          "index": 981,
+          "name": "ballplayer"
+        },
+        {
+          "index": 982,
+          "name": "groom"
+        },
+        {
+          "index": 983,
+          "name": "scuba diver"
+        }
+      ]
+    },
+    {
+      "id": "plants_flowers_and_crops",
+      "name": "Plants, flowers, and crops",
+      "classes": [
+        {
+          "index": 958,
+          "name": "hay"
+        },
+        {
+          "index": 984,
+          "name": "rapeseed"
+        },
+        {
+          "index": 985,
+          "name": "daisy"
+        },
+        {
+          "index": 986,
+          "name": "yellow lady's slipper"
+        }
+      ]
+    },
+    {
+      "id": "text_media_and_web_pages",
+      "name": "Text, media, and web pages",
+      "classes": [
+        {
+          "index": 916,
+          "name": "web site"
+        },
+        {
+          "index": 917,
+          "name": "comic book"
+        },
+        {
+          "index": 918,
+          "name": "crossword puzzle"
+        },
+        {
+          "index": 921,
+          "name": "book jacket"
+        },
+        {
+          "index": 922,
+          "name": "menu"
+        }
+      ]
+    },
+    {
+      "id": "miscellaneous_visually_distinct_objects",
+      "name": "Miscellaneous visually distinct objects",
+      "classes": [
+        {
+          "index": 398,
+          "name": "abacus"
+        },
+        {
+          "index": 409,
+          "name": "analog clock"
+        },
+        {
+          "index": 417,
+          "name": "balloon"
+        },
+        {
+          "index": 426,
+          "name": "barometer"
+        },
+        {
+          "index": 448,
+          "name": "birdhouse"
+        },
+        {
+          "index": 458,
+          "name": "brass"
+        },
+        {
+          "index": 464,
+          "name": "buckle"
+        },
+        {
+          "index": 472,
+          "name": "canoe"
+        },
+        {
+          "index": 474,
+          "name": "cardigan"
+        },
+        {
+          "index": 475,
+          "name": "car mirror"
+        },
+        {
+          "index": 476,
+          "name": "carousel"
+        },
+        {
+          "index": 477,
+          "name": "carpenter's kit"
+        },
+        {
+          "index": 479,
+          "name": "car wheel"
+        },
+        {
+          "index": 494,
+          "name": "chime"
+        },
+        {
+          "index": 496,
+          "name": "Christmas stocking"
+        },
+        {
+          "index": 509,
+          "name": "confectionery"
+        },
+        {
+          "index": 515,
+          "name": "cowboy hat"
+        },
+        {
+          "index": 517,
+          "name": "crane"
+        },
+        {
+          "index": 523,
+          "name": "crutch"
+        },
+        {
+          "index": 535,
+          "name": "disk brake"
+        },
+        {
+          "index": 540,
+          "name": "drilling platform"
+        },
+        {
+          "index": 561,
+          "name": "forklift"
+        },
+        {
+          "index": 571,
+          "name": "gas pump"
+        },
+        {
+          "index": 581,
+          "name": "grille"
+        },
+        {
+          "index": 591,
+          "name": "handkerchief"
+        },
+        {
+          "index": 595,
+          "name": "harvester"
+        },
+        {
+          "index": 599,
+          "name": "honeycomb"
+        },
+        {
+          "index": 603,
+          "name": "horse cart"
+        },
+        {
+          "index": 604,
+          "name": "hourglass"
+        },
+        {
+          "index": 610,
+          "name": "jersey"
+        },
+        {
+          "index": 612,
+          "name": "jinrikisha"
+        },
+        {
+          "index": 632,
+          "name": "loudspeaker"
+        },
+        {
+          "index": 635,
+          "name": "magnetic compass"
+        },
+        {
+          "index": 646,
+          "name": "maze"
+        },
+        {
+          "index": 649,
+          "name": "megalith"
+        },
+        {
+          "index": 652,
+          "name": "military uniform"
+        },
+        {
+          "index": 660,
+          "name": "mobile home"
+        },
+        {
+          "index": 666,
+          "name": "mortar"
+        },
+        {
+          "index": 669,
+          "name": "mosquito net"
+        },
+        {
+          "index": 672,
+          "name": "mountain tent"
+        },
+        {
+          "index": 673,
+          "name": "mouse"
+        },
+        {
+          "index": 676,
+          "name": "muzzle"
+        },
+        {
+          "index": 680,
+          "name": "nipple"
+        },
+        {
+          "index": 682,
+          "name": "obelisk"
+        },
+        {
+          "index": 686,
+          "name": "oil filter"
+        },
+        {
+          "index": 690,
+          "name": "oxcart"
+        },
+        {
+          "index": 693,
+          "name": "paddle"
+        },
+        {
+          "index": 694,
+          "name": "paddlewheel"
+        },
+        {
+          "index": 701,
+          "name": "parachute"
+        },
+        {
+          "index": 706,
+          "name": "patio"
+        },
+        {
+          "index": 723,
+          "name": "pinwheel"
+        },
+        {
+          "index": 724,
+          "name": "pirate"
+        },
+        {
+          "index": 726,
+          "name": "plane"
+        },
+        {
+          "index": 741,
+          "name": "prayer rug"
+        },
+        {
+          "index": 750,
+          "name": "quilt"
+        },
+        {
+          "index": 753,
+          "name": "radiator"
+        },
+        {
+          "index": 758,
+          "name": "reel"
+        },
+        {
+          "index": 778,
+          "name": "scale"
+        },
+        {
+          "index": 785,
+          "name": "seat belt"
+        },
+        {
+          "index": 786,
+          "name": "sewing machine"
+        },
+        {
+          "index": 789,
+          "name": "shoji"
+        },
+        {
+          "index": 797,
+          "name": "sleeping bag"
+        },
+        {
+          "index": 799,
+          "name": "sliding door"
+        },
+        {
+          "index": 801,
+          "name": "snorkel"
+        },
+        {
+          "index": 815,
+          "name": "spider web"
+        },
+        {
+          "index": 826,
+          "name": "stopwatch"
+        },
+        {
+          "index": 846,
+          "name": "table lamp"
+        },
+        {
+          "index": 850,
+          "name": "teddy"
+        },
+        {
+          "index": 853,
+          "name": "thatch"
+        },
+        {
+          "index": 854,
+          "name": "theater curtain"
+        },
+        {
+          "index": 858,
+          "name": "tile roof"
+        },
+        {
+          "index": 873,
+          "name": "triumphal arch"
+        },
+        {
+          "index": 892,
+          "name": "wall clock"
+        },
+        {
+          "index": 902,
+          "name": "whistle"
+        },
+        {
+          "index": 908,
+          "name": "wing"
+        }
+      ]
+    }
+  ]
+}

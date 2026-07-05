@@ -28,7 +28,16 @@ ImageNetTransforms = preprocess = transforms.Compose([
 ])
 
 data = load_groups()
-DATASETS_PATH = Path("data") / "datasets"
+
+
+def resolve_repo_path(path):
+    path = Path(str(path).replace("\\", "/"))
+    if path.is_absolute():
+        return path
+    return _ROOT / path
+
+
+DATASETS_PATH = resolve_repo_path(Path("data") / "datasets")
 
 
 class LazyDataset(Dataset):
@@ -547,7 +556,7 @@ def predict_with_cutoff(model, X, threshold):
 
 
 def save_model(model, cutoff_info, path, class_ids):
-    path = Path(path)
+    path = resolve_repo_path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
     checkpoint = {
@@ -576,7 +585,7 @@ def save_model(model, cutoff_info, path, class_ids):
 
 
 def save_pretrained_model_checkpoint(model, path, model_name):
-    path = Path(path)
+    path = resolve_repo_path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
     checkpoint = {
@@ -598,7 +607,7 @@ def save_logit_router_checkpoint(
     settings,
     cutoff_info=None,
 ):
-    path = Path(path)
+    path = resolve_repo_path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
     checkpoint = {

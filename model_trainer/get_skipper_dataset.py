@@ -15,6 +15,13 @@ from model_trainer.get_models_stats import load_model_from_checkpoint
 from model_trainer.train_models import imagenetv2_dataset
 
 
+def resolve_repo_path(path):
+    path = Path(str(path).replace("\\", "/"))
+    if path.is_absolute():
+        return path
+    return _ROOT / path
+
+
 CASCADE_TYPE_TO_LABEL = {
     "detector": 0,
     "global": 1,
@@ -128,7 +135,7 @@ def _create_skipper_dataset(
     dataset = TensorDataset(X_tensor, y_tensor)
 
     if save:
-        output_path = Path(dataset_path)
+        output_path = resolve_repo_path(dataset_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         torch.save(
             {
@@ -203,6 +210,7 @@ def create_skipper_dataset(*args, **kwargs):
 
 
 def load_skipper_dataset(path="data/processed_data/skipper_dataset_mlp.pt"):
+    path = resolve_repo_path(path)
     payload = torch.load(path, map_location="cpu")
     inputs = payload.get("inputs", payload.get("features"))
     if inputs is None:

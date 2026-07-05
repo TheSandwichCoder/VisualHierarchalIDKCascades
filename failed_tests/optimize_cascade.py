@@ -131,7 +131,9 @@ def _read_stats(path):
     if path is None:
         return pd.DataFrame()
 
-    path = Path(path)
+    path = Path(str(path).replace("\\", "/"))
+    if not path.is_absolute():
+        path = _ROOT / path
     if not path.exists():
         return pd.DataFrame()
 

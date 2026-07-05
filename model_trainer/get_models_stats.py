@@ -29,6 +29,24 @@ from model_trainer.train_models import (
 )
 
 
+def resolve_repo_path(path):
+    path = Path(str(path).replace("\\", "/"))
+    if path.is_absolute():
+        return path
+    return _ROOT / path
+
+
+def _set_checkpoint_mobilenet_mlp_head(model, num_classes, hidden_size=512, dropout=0.2):
+    in_features = model.classifier[0].in_features
+    model.classifier = torch.nn.Sequential(
+        torch.nn.Linear(in_features, hidden_size),
+        torch.nn.ReLU(),
+        torch.nn.Dropout(dropout),
+        torch.nn.Linear(hidden_size, num_classes),
+    )
+    return model
+
+
 def _load_logit_router_model(checkpoint):
     state_dict = checkpoint["backbone_state_dict"]
     backbone_name = _infer_resnet_backbone_name(state_dict, checkpoint.get("backbone_name"))
@@ -135,13 +153,17 @@ def _load_category_state_dict_model(checkpoint):
     elif any(key.startswith("features.") for key in state_dict):
         model_type = checkpoint.get("model_type")
         if model_type == "mobilenet_v3_small_mlp_identifier":
-            model = get_mobilenet_v3_small_mlp_identifier(
+            model = torchvision.models.mobilenet_v3_small(weights=None)
+            model = _set_checkpoint_mobilenet_mlp_head(
+                model,
                 num_classes,
                 hidden_size=checkpoint.get("hidden_size") or 512,
                 dropout=checkpoint.get("dropout") or 0.2,
             )
         elif model_type == "mobilenet_v3_large_mlp_identifier":
-            model = get_mobilenet_v3_large_mlp_identifier(
+            model = torchvision.models.mobilenet_v3_large(weights=None)
+            model = _set_checkpoint_mobilenet_mlp_head(
+                model,
                 num_classes,
                 hidden_size=checkpoint.get("hidden_size") or 512,
                 dropout=checkpoint.get("dropout") or 0.2,
@@ -149,14 +171,16 @@ def _load_category_state_dict_model(checkpoint):
         else:
             classifier_input_features = state_dict["classifier.0.weight"].shape[1]
             if classifier_input_features == 576:
-                model = get_mobilenet_v3_small(num_classes)
+                model = torchvision.models.mobilenet_v3_small(weights=None)
             elif classifier_input_features == 960:
-                model = get_mobilenet_v3_large(num_classes)
+                model = torchvision.models.mobilenet_v3_large(weights=None)
             else:
                 raise ValueError(
                     "Could not infer MobileNetV3 architecture from "
                     f"classifier.0.weight shape {state_dict['classifier.0.weight'].shape}"
                 )
+            in_features = model.classifier[-1].in_features
+            model.classifier[-1] = torch.nn.Linear(in_features, num_classes)
     else:
         raise ValueError("Could not infer model architecture from checkpoint state_dict")
 
@@ -167,6 +191,7 @@ def _load_category_state_dict_model(checkpoint):
 
 
 def load_model_from_checkpoint(checkpoint_path):
+    checkpoint_path = resolve_repo_path(checkpoint_path)
     checkpoint = torch.load(checkpoint_path, map_location=device)
     if "backbone_state_dict" in checkpoint and "router_state_dict" in checkpoint:
         return _load_logit_router_model(checkpoint), checkpoint
@@ -385,10 +410,10 @@ def create_specialized_model_stats_dataframe(
     max_samples=None,
 ):
     if checkpoint_paths is None:
-        directory = Path("models/specialized")
+        directory = resolve_repo_path("models/specialized")
         checkpoint_paths = sorted(directory.glob("*.pth")) if directory.exists() else []
     else:
-        checkpoint_paths = [Path(path) for path in checkpoint_paths]
+        checkpoint_paths = [resolve_repo_path(path) for path in checkpoint_paths]
 
     if confidence_thresholds is None:
         if confidence_threshold is None:
@@ -487,11 +512,14 @@ def create_intermediate_model_stats_dataframe(
 
     if checkpoint_paths is None:
         checkpoint_paths = []
-        for directory in [Path("models/logit_router"), Path("models/intermediate")]:
+        for directory in [
+            resolve_repo_path("models/logit_router"),
+            resolve_repo_path("models/intermediate"),
+        ]:
             if directory.exists():
                 checkpoint_paths.extend(sorted(directory.glob("*.pth")))
     else:
-        checkpoint_paths = [Path(path) for path in checkpoint_paths]
+        checkpoint_paths = [resolve_repo_path(path) for path in checkpoint_paths]
 
     if test_dataset is None:
         test_dataset = create_category_dataset(imagenetv2_dataset, data["groups"])
@@ -640,7 +668,7 @@ def create_mobilenet_identifier_stats_dataframe(
     if checkpoint_paths is None:
         checkpoint_paths = [
             path
-            for path in sorted(Path("models/intermediate").glob("*.pth"))
+            for path in sorted(resolve_repo_path("models/intermediate").glob("*.pth"))
             if "mobilenet" in path.stem.lower()
         ]
 
@@ -659,6 +687,7 @@ def save_mobilenet_identifier_stats(
     **kwargs,
 ):
     df = create_mobilenet_identifier_stats_dataframe(**kwargs)
+    output_path = resolve_repo_path(output_path)
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
     df.to_pickle(output_path)
     df.drop(columns=["confusion_matrix"], errors="ignore").to_csv(csv_path, index=False)
@@ -676,10 +705,10 @@ def create_global_model_stats_dataframe(
     max_samples=None,
 ):
     if checkpoint_paths is None:
-        directory = Path(model_directory)
+        directory = resolve_repo_path(model_directory)
         checkpoint_paths = sorted(directory.glob("*.pth")) if directory.exists() else []
     else:
-        checkpoint_paths = [Path(path) for path in checkpoint_paths]
+        checkpoint_paths = [resolve_repo_path(path) for path in checkpoint_paths]
 
     if test_dataset is None:
         test_dataset = imagenetv2_dataset

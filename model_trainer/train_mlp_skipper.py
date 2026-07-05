@@ -14,6 +14,7 @@ from model_trainer.get_skipper_dataset import (
     CASCADE_TYPE_TO_LABEL,
     LABEL_TO_CASCADE_TYPE,
     create_mlp_skipper_dataset,
+    resolve_repo_path,
 )
 
 
@@ -32,7 +33,7 @@ class SkipperMLP(nn.Module):
 
 
 def _load_payload(dataset_path):
-    dataset_path = Path(dataset_path)
+    dataset_path = resolve_repo_path(dataset_path)
     if not dataset_path.exists():
         raise FileNotFoundError(
             f"{dataset_path} does not exist. Create it with "
@@ -125,7 +126,7 @@ def train_mlp_skipper(
     test_fraction=0.2,
     seed=42,
 ):
-    if create_dataset_if_missing and not Path(dataset_path).exists():
+    if create_dataset_if_missing and not resolve_repo_path(dataset_path).exists():
         create_mlp_skipper_dataset(dataset_path=dataset_path)
 
     dataset, payload = load_mlp_training_dataset(
@@ -189,7 +190,7 @@ def train_mlp_skipper(
 
     final_metrics = history[-1] if history else _evaluate(test_loader, model, loss_fn)
 
-    output_path = Path(output_path)
+    output_path = resolve_repo_path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     torch.save(
         {

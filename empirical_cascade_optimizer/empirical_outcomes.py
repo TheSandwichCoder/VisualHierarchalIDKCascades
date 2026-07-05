@@ -22,6 +22,13 @@ from failed_tests.optimize_cascade import (
 from model_trainer.train_models import data, imagenetv2_dataset
 
 
+def _resolve_repo_path(path):
+    path = Path(str(path).replace("\\", "/"))
+    if path.is_absolute():
+        return path
+    return _ROOT / path
+
+
 @dataclass(frozen=True)
 class Candidate:
     id: str
@@ -183,13 +190,14 @@ def collect_empirical_outcomes(
         "outcomes": pd.concat(outcome_frames, ignore_index=True) if outcome_frames else pd.DataFrame(),
     }
 
-    output_path = Path(output_path)
+    output_path = _resolve_repo_path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     pd.to_pickle(payload, output_path)
     return payload
 
 
 def load_empirical_outcomes(path="models/stats/empirical_outcomes.pkl"):
+    path = _resolve_repo_path(path)
     return pd.read_pickle(path)
 
 
